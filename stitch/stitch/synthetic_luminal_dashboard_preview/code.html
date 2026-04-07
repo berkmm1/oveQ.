@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SyntheticLuminal Dashboard | Project Nexus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#a5e7ff",
+                    "secondary-container": "#6e208c",
+                    "primary-container": "#00d2ff",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#004f53",
+                    "outline-variant": "#3c494e",
+                    "tertiary-container": "#00d6e1",
+                    "on-tertiary-container": "#00585d",
+                    "inverse-primary": "#00677f",
+                    "background": "#131315",
+                    "on-surface": "#e5e1e4",
+                    "on-primary": "#003543",
+                    "on-secondary": "#520070",
+                    "on-primary-container": "#00566a",
+                    "secondary": "#edb1ff",
+                    "secondary-fixed": "#f9d8ff",
+                    "inverse-on-surface": "#313032",
+                    "on-primary-fixed": "#001f28",
+                    "surface-container-high": "#2a2a2c",
+                    "surface-container-highest": "#353437",
+                    "tertiary-fixed": "#6ff6ff",
+                    "primary-fixed": "#b6ebff",
+                    "secondary-fixed-dim": "#edb1ff",
+                    "surface-container-low": "#1c1b1d",
+                    "primary-fixed-dim": "#47d6ff",
+                    "on-secondary-fixed": "#320046",
+                    "on-secondary-container": "#e498ff",
+                    "surface": "#131315",
+                    "on-tertiary-fixed": "#002022",
+                    "on-primary-fixed-variant": "#004e60",
+                    "outline": "#859399",
+                    "surface-dim": "#131315",
+                    "on-tertiary": "#00373a",
+                    "error": "#ffb4ab",
+                    "surface-container-lowest": "#0e0e10",
+                    "inverse-surface": "#e5e1e4",
+                    "on-error-container": "#ffdad6",
+                    "surface-tint": "#47d6ff",
+                    "on-error": "#690005",
+                    "tertiary-fixed-dim": "#00dce6",
+                    "on-surface-variant": "#bbc9cf",
+                    "surface-bright": "#39393b",
+                    "surface-variant": "#353437",
+                    "surface-container": "#201f21",
+                    "on-secondary-fixed-variant": "#6e208c",
+                    "tertiary": "#34f4ff",
+                    "on-background": "#e5e1e4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        vertical-align: middle;
+      }
+      .glass-panel {
+        background: rgba(53, 52, 55, 0.6);
+        backdrop-filter: blur(24px);
+      }
+      .ai-pulse-border {
+        position: relative;
+        padding: 1px;
+        background: linear-gradient(135deg, #a5e7ff 0%, #34f4ff 50%, #6e208c 100%);
+        border-radius: 1.5rem;
+      }
+      .ai-pulse-inner {
+        background: #1c1b1d;
+        border-radius: calc(1.5rem - 1px);
+      }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container/30">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#1c1b1d] flex flex-col py-6 px-4 z-40">
+<div class="mb-10 px-4">
+<h1 class="text-lg font-headline text-white">Project Nexus</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant">Enterprise Tier</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center space-x-3 bg-[#201f21] text-[#00d2ff] rounded-lg px-4 py-2 border-l-4 border-[#00d2ff] transition-all font-medium text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center space-x-3 text-[#bbc9cf] px-4 py-2 hover:bg-[#201f21] hover:text-white transition-all font-medium text-sm hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span>Neural Networks</span>
+</a>
+<a class="flex items-center space-x-3 text-[#bbc9cf] px-4 py-2 hover:bg-[#201f21] hover:text-white transition-all font-medium text-sm hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span>Agent Fleet</span>
+</a>
+<a class="flex items-center space-x-3 text-[#bbc9cf] px-4 py-2 hover:bg-[#201f21] hover:text-white transition-all font-medium text-sm hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span>Data Vault</span>
+</a>
+<a class="flex items-center space-x-3 text-[#bbc9cf] px-4 py-2 hover:bg-[#201f21] hover:text-white transition-all font-medium text-sm hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span>API Keys</span>
+</a>
+<a class="flex items-center space-x-3 text-[#bbc9cf] px-4 py-2 hover:bg-[#201f21] hover:text-white transition-all font-medium text-sm hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 space-y-2 border-t border-outline-variant/15">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-semibold py-2.5 rounded-xl text-sm mb-4 active:scale-95 transition-transform">
+                New Instance
+            </button>
+<a class="flex items-center space-x-3 text-[#bbc9cf] px-4 py-2 hover:text-white transition-all text-xs uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="auto_stories">auto_stories</span>
+<span>Documentation</span>
+</a>
+<a class="flex items-center space-x-3 text-[#bbc9cf] px-4 py-2 hover:text-white transition-all text-xs uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="support_agent">support_agent</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen relative">
+<!-- TopAppBar (Execution of Design System + JSON hints) -->
+<header class="fixed top-0 right-0 left-64 h-16 bg-surface/60 backdrop-blur-xl z-30 flex items-center justify-between px-8">
+<div class="flex-1 max-w-2xl">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-lowest border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-1 focus:ring-primary/40 transition-all placeholder:text-on-surface-variant/50" placeholder="Search neural pathways..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<button class="relative text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-tertiary rounded-full border-2 border-surface"></span>
+</button>
+<div class="flex items-center space-x-3 bg-surface-container-low py-1.5 pl-1.5 pr-3 rounded-full border border-outline-variant/10">
+<img alt="User Avatar" class="w-7 h-7 rounded-full object-cover" data-alt="Close up portrait of a stylish young man with glasses against a neon lit urban background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwJZa8hgwGpqlW681-22L93P0_I4zDtwHshhF6z1nw6ZPjBAPWJfur2F-wtUgL2E-bCLHTi5TXIohosqa9B8LYDMJFATo4o8RHXx0D0SPAEyYX0hXIBDjsfiLdRYkNzUCFCs8vFL_6n9a-VhiepQtaPnoO5fGFGDW_YI3GBklfi8MS5LLUJtCSUuhJMphL9Dq__XWQtK_SCXr3-t4FNa19eRpJQv8lHxWmyjlQl0DYNmu2Ghc7UizCLNded7Zf0CIoXior8lhdKA"/>
+<span class="text-sm font-medium text-white">Alex Rivera</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">expand_more</span>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<div class="pt-24 pb-12 px-8 space-y-8">
+<!-- Hero AI Interaction Area -->
+<section class="ai-pulse-border">
+<div class="ai-pulse-inner p-8">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="space-y-2">
+<h2 class="text-2xl font-headline text-white tracking-tight">Initiate Neural Query</h2>
+<p class="text-on-surface-variant text-sm max-w-lg">SyntheticLuminal L4-Pro is active. Ready to deploy autonomous agents or process deep-data structures.</p>
+</div>
+<div class="flex space-x-3">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-primary" data-icon="memory">memory</span>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-tertiary" data-icon="cloud_done">cloud_done</span>
+</div>
+</div>
+<span class="text-xs text-on-surface-variant font-mono flex items-center">SYST_ACTIVE // 98.4ms</span>
+</div>
+</div>
+<div class="mt-8 relative">
+<textarea class="w-full bg-surface-container-lowest border-none rounded-2xl p-4 text-on-surface focus:ring-1 focus:ring-primary/40 transition-all placeholder:text-on-surface-variant/30 resize-none" placeholder="Describe the mission or data structure..." rows="3"></textarea>
+<div class="absolute bottom-3 right-3 flex items-center space-x-2">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<button class="bg-primary text-on-primary p-2 rounded-xl hover:shadow-[0_0_15px_rgba(165,231,255,0.4)] transition-all">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Grid Content -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Main Analytics & Projects -->
+<div class="lg:col-span-2 space-y-8">
+<!-- Bento Grid for Project Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-6 rounded-2xl transition-all hover:bg-surface-container-high group border border-outline-variant/5">
+<div class="flex justify-between items-start mb-6">
+<div class="p-3 bg-primary-container/10 rounded-xl">
+<span class="material-symbols-outlined text-primary-container" data-icon="psychology">psychology</span>
+</div>
+<span class="text-[10px] font-bold text-tertiary px-2 py-1 rounded bg-tertiary/10">ACTIVE</span>
+</div>
+<h3 class="text-white font-headline text-lg mb-1">Sentiment Matrix V3</h3>
+<p class="text-on-surface-variant text-xs mb-4">Processing real-time social streams for trend trajectory.</p>
+<div class="w-full bg-surface-container-lowest h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-4/5"></div>
+</div>
+<div class="mt-2 flex justify-between text-[10px] text-on-surface-variant uppercase tracking-widest font-semibold">
+<span>Optimization</span>
+<span>80% Complete</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-2xl transition-all hover:bg-surface-container-high border border-outline-variant/5">
+<div class="flex justify-between items-start mb-6">
+<div class="p-3 bg-secondary-container/10 rounded-xl">
+<span class="material-symbols-outlined text-secondary" data-icon="robot_2">robot_2</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant px-2 py-1 rounded bg-surface-container-highest">QUEUED</span>
+</div>
+<h3 class="text-white font-headline text-lg mb-1">Fleet Deployment</h3>
+<p class="text-on-surface-variant text-xs mb-4">Provisioning 12 instances for edge-compute nodes.</p>
+<div class="flex items-center space-x-2 text-primary">
+<span class="text-xs font-mono">Initializing protocol 7...</span>
+</div>
+</div>
+</div>
+<!-- Real-time Chart Simulation -->
+<div class="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/5">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h3 class="text-white font-headline text-lg">Neural Throughput</h3>
+<p class="text-on-surface-variant text-xs">Total inference cycles over past 24 hours</p>
+</div>
+<div class="text-right">
+<span class="text-2xl font-headline text-primary">12.4M</span>
+<p class="text-tertiary text-[10px] uppercase font-bold">+14.2% Growth</p>
+</div>
+</div>
+<div class="h-48 flex items-end justify-between space-x-2">
+<div class="w-full bg-primary/10 rounded-t-lg transition-all hover:bg-primary/30" style="height: 40%"></div>
+<div class="w-full bg-primary/10 rounded-t-lg transition-all hover:bg-primary/30" style="height: 60%"></div>
+<div class="w-full bg-primary/10 rounded-t-lg transition-all hover:bg-primary/30" style="height: 35%"></div>
+<div class="w-full bg-primary/10 rounded-t-lg transition-all hover:bg-primary/30" style="height: 85%"></div>
+<div class="w-full bg-primary/10 rounded-t-lg transition-all hover:bg-primary/30" style="height: 50%"></div>
+<div class="w-full bg-primary/10 rounded-t-lg transition-all hover:bg-primary/30" style="height: 70%"></div>
+<div class="w-full bg-primary/10 rounded-t-lg transition-all hover:bg-primary/30" style="height: 90%"></div>
+<div class="w-full bg-primary/20 rounded-t-lg transition-all hover:bg-primary/40 border-t-2 border-primary" style="height: 45%"></div>
+<div class="w-full bg-primary/10 rounded-t-lg transition-all hover:bg-primary/30" style="height: 30%"></div>
+</div>
+</div>
+</div>
+<!-- Recent Activity Sidebar -->
+<div class="space-y-6">
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/5">
+<h3 class="text-white font-headline text-sm uppercase tracking-widest mb-6">Recent Activity</h3>
+<div class="space-y-6">
+<div class="flex space-x-4">
+<div class="mt-1 w-2 h-2 rounded-full bg-primary shrink-0"></div>
+<div class="space-y-1">
+<p class="text-sm text-white font-medium">Nexus-7 Node Re-synchronized</p>
+<p class="text-xs text-on-surface-variant">Global distributed ledger updated.</p>
+<p class="text-[10px] text-on-surface-variant/40 font-mono">2m ago</p>
+</div>
+</div>
+<div class="flex space-x-4">
+<div class="mt-1 w-2 h-2 rounded-full bg-secondary shrink-0"></div>
+<div class="space-y-1">
+<p class="text-sm text-white font-medium">New API Key Generated</p>
+<p class="text-xs text-on-surface-variant">Production access granted to 'Agent Alpha'.</p>
+<p class="text-[10px] text-on-surface-variant/40 font-mono">45m ago</p>
+</div>
+</div>
+<div class="flex space-x-4">
+<div class="mt-1 w-2 h-2 rounded-full bg-error shrink-0"></div>
+<div class="space-y-1">
+<p class="text-sm text-white font-medium">Traffic Spike Detected</p>
+<p class="text-xs text-on-surface-variant">Scaling instances in us-east-1.</p>
+<p class="text-[10px] text-on-surface-variant/40 font-mono">1h ago</p>
+</div>
+</div>
+<div class="flex space-x-4">
+<div class="mt-1 w-2 h-2 rounded-full bg-tertiary shrink-0"></div>
+<div class="space-y-1">
+<p class="text-sm text-white font-medium">Backup Completed</p>
+<p class="text-xs text-on-surface-variant">Data Vault mirrored to secure cold storage.</p>
+<p class="text-[10px] text-on-surface-variant/40 font-mono">4h ago</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 text-primary text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">
+                            View Audit Log
+                        </button>
+</div>
+<!-- System Status Card -->
+<div class="bg-gradient-to-br from-[#1c1b1d] to-[#2a2a2c] p-6 rounded-2xl border border-outline-variant/10">
+<div class="flex items-center space-x-3 mb-4">
+<span class="material-symbols-outlined text-tertiary" data-icon="sensors" style="font-variation-settings: 'FILL' 1;">sensors</span>
+<span class="text-white font-headline text-sm">System Health</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">API Latency</span>
+<span class="text-tertiary font-mono">12ms</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Compute Load</span>
+<span class="text-primary font-mono">42%</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Encryption</span>
+<span class="text-white font-mono">AES-512</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer (Authority: JSON) -->
+<footer class="w-full py-12 px-8 border-t border-[#3c494e]/15 bg-[#131315]">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 w-full max-w-7xl mx-auto">
+<div class="lg:col-span-2">
+<span class="font-headline text-lg text-white">Synthetic Luminal</span>
+<p class="text-on-surface-variant text-[10px] uppercase tracking-widest mt-4 leading-relaxed">
+                        Precision engineering for the synthetic era. <br/>
+                        © 2024 Synthetic Luminal AI. All rights reserved.
+                    </p>
+</div>
+<div>
+<h4 class="text-[#00d2ff] font-label text-xs uppercase tracking-widest mb-4">Product</h4>
+<ul class="space-y-2">
+<li><a class="text-[#bbc9cf] text-xs hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Features</a></li>
+<li><a class="text-[#bbc9cf] text-xs hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Models</a></li>
+<li><a class="text-[#bbc9cf] text-xs hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Enterprise</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-[#00d2ff] font-label text-xs uppercase tracking-widest mb-4">Company</h4>
+<ul class="space-y-2">
+<li><a class="text-[#bbc9cf] text-xs hover:text-[#a5e7ff] transition-opacity duration-300" href="#">About</a></li>
+<li><a class="text-[#bbc9cf] text-xs hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Careers</a></li>
+<li><a class="text-[#bbc9cf] text-xs hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-[#00d2ff] font-label text-xs uppercase tracking-widest mb-4">Resources</h4>
+<ul class="space-y-2">
+<li><a class="text-[#bbc9cf] text-xs hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Docs</a></li>
+<li><a class="text-[#bbc9cf] text-xs hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Community</a></li>
+<li><a class="text-[#bbc9cf] text-xs hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Status</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-[#00d2ff] font-label text-xs uppercase tracking-widest mb-4">Legal</h4>
+<ul class="space-y-2">
+<li><a class="text-[#bbc9cf] text-xs hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Privacy</a></li>
+<li><a class="text-[#bbc9cf] text-xs hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Terms</a></li>
+<li><a class="text-[#bbc9cf] text-xs hover:text-[#a5e7ff] transition-opacity duration-300" href="#">SLA</a></li>
+</ul>
+</div>
+</div>
+</footer>
+</main>
+</body></html>

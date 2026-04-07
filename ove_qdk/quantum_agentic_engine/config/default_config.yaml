@@ -1,0 +1,255 @@
+# Quantum Agentic Loop Engine - Default Configuration
+# QDK (Q#) Based Autonomous Agent System
+
+# ============================================
+# AGENT CONFIGURATION
+# ============================================
+agent:
+  # Quantum register sizes
+  num_perception_qubits: 16
+  num_decision_qubits: 8
+  num_action_qubits: 8
+  num_memory_qubits: 32
+  num_entanglement_qubits: 16
+
+  # Learning parameters
+  learning_rate: 0.01
+  discount_factor: 0.95
+  exploration_rate: 1.0
+  epsilon_decay: 0.995
+  epsilon_min: 0.01
+
+  # Replay buffer
+  buffer_size: 10000
+  batch_size: 32
+
+  # Target network update
+  target_update_freq: 100
+
+  # Gradient clipping
+  max_gradient_norm: 1.0
+
+  # Prioritized experience replay
+  use_per: true
+  per_alpha: 0.6
+  per_beta: 0.4
+
+# ============================================
+# ENVIRONMENT CONFIGURATION
+# ============================================
+environment:
+  type: gridworld
+  size: 8
+  max_steps: 200
+  reward_scale: 1.0
+  normalize_observations: true
+  quantum_encode: true
+
+  # Environment-specific settings
+  gridworld:
+    obstacle_density: 0.1
+    stochastic_wind: false
+
+  continuous:
+    state_dim: 24
+    action_dim: 6
+    action_bounds: [-1.0, 1.0]
+
+  multiagent:
+    num_agents: 4
+    communication_range: 5.0
+    team_reward: true
+
+# ============================================
+# TRAINING CONFIGURATION
+# ============================================
+training:
+  num_episodes: 1000
+  max_steps_per_episode: 200
+
+  # Evaluation
+  eval_frequency: 50
+  eval_episodes: 10
+
+  # Checkpointing
+  save_frequency: 100
+  checkpoint_dir: ./checkpoints
+  keep_last_n: 5
+
+  # Logging
+  log_frequency: 10
+
+  # Early stopping
+  early_stopping: true
+  patience: 50
+  min_delta: 0.01
+
+  # Distributed training
+  num_workers: 1
+  async_training: false
+
+  # Curriculum learning
+  use_curriculum: false
+  curriculum_stages: 5
+
+# ============================================
+# QUANTUM CIRCUIT CONFIGURATION
+# ============================================
+quantum:
+  # Circuit architecture
+  circuit_depth: 8
+  entanglement_pattern: linear
+
+  # Error correction
+  error_correction: true
+  error_rate: 0.001
+  surface_code_distance: 3
+
+  # Noise mitigation
+  noise_mitigation: true
+  zero_noise_extrapolation: true
+  probabilistic_error_cancellation: false
+
+  # Variational circuit parameters
+  num_variational_layers: 4
+  activation_function: sigmoid
+
+  # Data encoding
+  encoding_method: angle
+  reuploading: true
+  num_reuploads: 3
+
+# ============================================
+# REINFORCEMENT LEARNING CONFIGURATION
+# ============================================
+reinforcement_learning:
+  algorithm: dqn
+
+  # DQN variants
+  use_double_dqn: true
+  use_dueling: true
+  use_noisy_nets: false
+
+  # Policy gradient
+  policy_gradient:
+    clip_epsilon: 0.2
+    value_coeff: 0.5
+    entropy_coeff: 0.01
+    gae_lambda: 0.95
+
+  # Actor-Critic
+  actor_critic:
+    actor_lr: 0.0003
+    critic_lr: 0.001
+
+  # Multi-step learning
+  n_step: 3
+
+  # Intrinsic motivation
+  use_curiosity: false
+  curiosity_weight: 0.01
+
+# ============================================
+# MULTI-AGENT CONFIGURATION
+# ============================================
+multi_agent:
+  enabled: false
+  num_agents: 4
+
+  # Communication
+  communication_dim: 8
+  communication_type: quantum_teleportation
+
+  # Coordination
+  coordination_algorithm: consensus
+  consensus_iterations: 10
+
+  # Network topology
+  topology: fully_connected
+  entanglement_strength: 0.5
+
+  # Learning
+  parameter_sharing: true
+  centralized_critic: false
+
+# ============================================
+# MONITORING CONFIGURATION
+# ============================================
+monitoring:
+  # Prometheus
+  prometheus_enabled: true
+  prometheus_port: 8000
+
+  # TensorBoard
+  tensorboard_enabled: true
+  tensorboard_dir: ./runs
+
+  # Weights & Biases
+  wandb_enabled: false
+  wandb_project: quantum-agentic-engine
+  wandb_entity: null
+
+  # Console logging
+  console_log_freq: 10
+
+  # Metrics collection
+  metrics_window: 100
+
+  # Profiling
+  enable_profiling: false
+  profile_output: ./profile.json
+
+# ============================================
+# HARDWARE CONFIGURATION
+# ============================================
+hardware:
+  # Simulator settings
+  simulator: default
+  shots: 1024
+
+  # Azure Quantum
+  use_azure_quantum: false
+  azure_subscription_id: null
+  azure_resource_group: null
+  azure_workspace: null
+
+  # Target hardware
+  target: simulator
+  # Options: simulator, ionq, rigetti, quantinuum
+
+  # Optimization
+  circuit_optimization: true
+  transpiler_optimization_level: 2
+
+# ============================================
+# ADVANCED FEATURES
+# ============================================
+advanced:
+  # Meta-learning
+  meta_learning: false
+  meta_lr: 0.001
+  num_meta_tasks: 10
+
+  # Transfer learning
+  transfer_learning: false
+  source_checkpoint: null
+  freeze_layers: []
+
+  # Hierarchical RL
+  hierarchical: false
+  num_options: 4
+  option_termination_prob: 0.1
+
+  # Model-based RL
+  model_based: false
+  imagination_rollouts: 50
+  model_learning_rate: 0.001
+
+  # Adversarial training
+  adversarial_training: false
+  adversarial_epsilon: 0.1
+
+  # Ensemble methods
+  ensemble: false
+  num_ensemble_members: 5
+  ensemble_method: voting

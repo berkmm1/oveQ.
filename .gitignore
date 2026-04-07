@@ -1,0 +1,17 @@
+node_modules/
+.next/
+dist/
+build/
+__pycache__/
+*.log
+runtime/sessions/*
+runtime/tmp/*
+runtime/output/*
+memory/history/*
+memory/projects/*
+memory/datasets/*
+verification/screenshots/*
+verification/videos/*
+.venv/
+venv/
+*.pyc
