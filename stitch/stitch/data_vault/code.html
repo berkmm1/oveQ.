@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SyntheticLuminal - Data Vault</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#859399",
+                        "inverse-primary": "#00677f",
+                        "surface-container-lowest": "#0e0e10",
+                        "inverse-on-surface": "#313032",
+                        "on-secondary-fixed": "#320046",
+                        "tertiary-fixed": "#6ff6ff",
+                        "on-error-container": "#ffdad6",
+                        "on-surface": "#e5e1e4",
+                        "secondary-fixed-dim": "#edb1ff",
+                        "on-tertiary": "#00373a",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#6e208c",
+                        "tertiary-fixed-dim": "#00dce6",
+                        "tertiary": "#34f4ff",
+                        "surface": "#131315",
+                        "surface-dim": "#131315",
+                        "on-error": "#690005",
+                        "primary-container": "#00d2ff",
+                        "primary-fixed": "#b6ebff",
+                        "on-primary-fixed": "#001f28",
+                        "surface-tint": "#47d6ff",
+                        "on-primary-fixed-variant": "#004e60",
+                        "on-surface-variant": "#bbc9cf",
+                        "on-secondary": "#520070",
+                        "on-primary": "#003543",
+                        "tertiary-container": "#00d6e1",
+                        "on-tertiary-container": "#00585d",
+                        "secondary-container": "#6e208c",
+                        "error": "#ffb4ab",
+                        "surface-container-high": "#2a2a2c",
+                        "on-tertiary-fixed-variant": "#004f53",
+                        "surface-variant": "#353437",
+                        "on-tertiary-fixed": "#002022",
+                        "surface-container-highest": "#353437",
+                        "surface-bright": "#39393b",
+                        "outline-variant": "#3c494e",
+                        "inverse-surface": "#e5e1e4",
+                        "secondary": "#edb1ff",
+                        "primary": "#a5e7ff",
+                        "primary-fixed-dim": "#47d6ff",
+                        "on-secondary-container": "#e498ff",
+                        "surface-container-low": "#1c1b1d",
+                        "secondary-fixed": "#f9d8ff",
+                        "on-background": "#e5e1e4",
+                        "surface-container": "#201f21",
+                        "on-primary-container": "#00566a",
+                        "background": "#131315"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(53, 52, 55, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container/30">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#1c1b1d] flex flex-col py-6 px-4 z-40">
+<div class="mb-10 px-4">
+<h1 class="text-lg font-headline text-white">Project Nexus</h1>
+<p class="text-[10px] text-primary uppercase tracking-[0.2em] font-medium opacity-80">OVE-1.5 Active</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="text-[#bbc9cf] px-4 py-2 hover:bg-[#201f21] hover:text-white transition-all flex items-center gap-3 group duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="dashboard">dashboard</span>
+<span class="font-['Inter'] text-sm font-medium">Dashboard</span>
+</a>
+<a class="text-[#bbc9cf] px-4 py-2 hover:bg-[#201f21] hover:text-white transition-all flex items-center gap-3 group duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="hub">hub</span>
+<span class="font-['Inter'] text-sm font-medium">Neural Networks</span>
+</a>
+<a class="text-[#bbc9cf] px-4 py-2 hover:bg-[#201f21] hover:text-white transition-all flex items-center gap-3 group duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="smart_toy">smart_toy</span>
+<span class="font-['Inter'] text-sm font-medium">Agent Fleet</span>
+</a>
+<!-- Active Tab: Data Vault -->
+<a class="bg-[#201f21] text-[#00d2ff] rounded-lg px-4 py-2 border-l-4 border-[#00d2ff] flex items-center gap-3 group duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="database">database</span>
+<span class="font-['Inter'] text-sm font-medium">Data Vault</span>
+</a>
+<a class="text-[#bbc9cf] px-4 py-2 hover:bg-[#201f21] hover:text-white transition-all flex items-center gap-3 group duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="terminal">terminal</span>
+<span class="font-['Inter'] text-sm font-medium">API Keys</span>
+</a>
+<a class="text-[#bbc9cf] px-4 py-2 hover:bg-[#201f21] hover:text-white transition-all flex items-center gap-3 group duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="settings">settings</span>
+<span class="font-['Inter'] text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-6">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold py-3 px-4 rounded-xl shadow-lg shadow-primary-container/20 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                New Instance
+            </button>
+<div class="space-y-2">
+<a class="text-[#bbc9cf] px-4 py-1 text-xs uppercase tracking-widest flex items-center gap-2 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="auto_stories">auto_stories</span>
+                    Documentation
+                </a>
+<a class="text-[#bbc9cf] px-4 py-1 text-xs uppercase tracking-widest flex items-center gap-2 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="support_agent">support_agent</span>
+                    Support
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen bg-surface">
+<!-- TopNavBar (Embedded Style) -->
+<header class="h-16 flex items-center justify-between px-10 glass-panel sticky top-0 z-30">
+<div class="flex items-center gap-4">
+<h2 class="text-xl font-headline font-bold text-white tracking-tight">Data Vault</h2>
+<div class="h-4 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="storage">storage</span>
+<span class="text-xs font-label tracking-wider uppercase">84.2 TB / 100 TB</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-lg" data-icon="search">search</span>
+<input class="bg-surface-container-lowest text-on-surface text-sm pl-10 pr-4 py-2 rounded-full w-64 border-none focus:ring-1 focus:ring-primary/40 placeholder:text-on-surface-variant/50" placeholder="Search datasets, vectors, docs..." type="text"/>
+</div>
+<button class="text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/20">
+<img alt="User" data-alt="close-up portrait of a professional male tech worker with a neutral expression and soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDd-VyEEf9gxBu3syq5DROn1e3wwTk1CCIb4RMd9D8zsNtMXyElDRXZCWpoV6Q1vZ2t3M0SzoPEWkJxo_LZAnigkV9xLphKeIsVIEvGztu7FffUnyzj7M5ThTZp0kn-NBEvoPQq9Whw54JM_5iPMckFqDCQR0SJ8n8KYLisqjowl3tZPXiSkNlVH-VnezuA8HkRyoCJ9QJxSAPL1lil4TFlXfQImztXFSRC9chdoj47FuSRKyEhKoDa7NGMppTi-QqP4DLzoJnI_A"/>
+</div>
+</div>
+</header>
+<div class="p-10 max-w-7xl mx-auto space-y-10">
+<!-- Quick Actions & Stats Bento -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- File Upload Zone -->
+<div class="md:col-span-2 bg-surface-container border border-outline-variant/10 rounded-xl p-8 flex flex-col items-center justify-center border-dashed group hover:bg-surface-container-high transition-all cursor-pointer">
+<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="upload_file">upload_file</span>
+</div>
+<h3 class="font-headline text-lg text-white mb-1">Ingest New Source</h3>
+<p class="text-on-surface-variant text-sm text-center">Drag and drop raw JSON, CSV, or PDF to begin vectorization.</p>
+</div>
+<!-- Stats 1: Vector Embeddings -->
+<div class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-between overflow-hidden relative">
+<div class="relative z-10">
+<p class="text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1">Embeddings</p>
+<h4 class="text-3xl font-headline font-bold text-tertiary">14.2M</h4>
+<p class="text-xs text-on-surface-variant mt-2">Active vectors across 4 clusters</p>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-9xl" data-icon="memory">memory</span>
+</div>
+</div>
+<!-- Stats 2: Secure Index -->
+<div class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-between overflow-hidden relative">
+<div class="relative z-10">
+<p class="text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1">Secure Index</p>
+<h4 class="text-3xl font-headline font-bold text-primary">2,840</h4>
+<p class="text-xs text-on-surface-variant mt-2">Encrypted document references</p>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-9xl" data-icon="verified_user">verified_user</span>
+</div>
+</div>
+</section>
+<!-- Filters Bar -->
+<section class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-2">
+<button class="bg-surface-container text-primary-container px-4 py-2 rounded-lg text-xs font-label font-bold uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="filter_alt">filter_alt</span>
+                        Filters
+                    </button>
+<div class="flex bg-surface-container-low rounded-lg p-1">
+<button class="px-4 py-1.5 text-xs font-medium text-white bg-surface-container-high rounded-md">All Projects</button>
+<button class="px-4 py-1.5 text-xs font-medium text-on-surface-variant hover:text-white">Neural Net</button>
+<button class="px-4 py-1.5 text-xs font-medium text-on-surface-variant hover:text-white">Training Data</button>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<select class="bg-transparent border-none text-xs font-label uppercase tracking-widest text-on-surface-variant focus:ring-0 cursor-pointer">
+<option>Size: Largest First</option>
+<option>Size: Smallest First</option>
+</select>
+<select class="bg-transparent border-none text-xs font-label uppercase tracking-widest text-on-surface-variant focus:ring-0 cursor-pointer">
+<option>Modified: Recent</option>
+<option>Modified: Oldest</option>
+</select>
+</div>
+</section>
+<!-- Dataset Browser Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Dataset Card 1 -->
+<div class="bg-surface-container p-6 rounded-xl space-y-4 hover:translate-y-[-4px] transition-transform duration-300">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="schema">schema</span>
+</div>
+<span class="bg-surface-container-highest px-2 py-1 rounded text-[10px] font-bold text-tertiary-fixed uppercase tracking-tighter">Vector Store</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-white text-lg">Global Sentiment_Alpha</h4>
+<p class="text-on-surface-variant text-sm line-clamp-2">Multi-lingual vector embeddings for real-time market sentiment analysis across 42 languages.</p>
+</div>
+<div class="flex items-center gap-4 text-xs text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="data_usage">data_usage</span>
+                            1.2 GB
+                        </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="history">history</span>
+                            2h ago
+                        </div>
+</div>
+</div>
+<!-- Dataset Card 2 -->
+<div class="bg-surface-container p-6 rounded-xl space-y-4 hover:translate-y-[-4px] transition-transform duration-300">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="folder_zip">folder_zip</span>
+</div>
+<span class="bg-surface-container-highest px-2 py-1 rounded text-[10px] font-bold text-secondary uppercase tracking-tighter">Raw Data</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-white text-lg">Synthetic_Logs_Q4</h4>
+<p class="text-on-surface-variant text-sm line-clamp-2">Complete system trace logs from the Nexus-7 training run. Compressed JSON format.</p>
+</div>
+<div class="flex items-center gap-4 text-xs text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="data_usage">data_usage</span>
+                            424 GB
+                        </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="history">history</span>
+                            12d ago
+                        </div>
+</div>
+</div>
+<!-- Dataset Card 3 -->
+<div class="bg-surface-container p-6 rounded-xl space-y-4 hover:translate-y-[-4px] transition-transform duration-300">
+<div class="flex justify-between items-start">
+<div class="w-12 h-12 bg-tertiary/10 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary" data-icon="description">description</span>
+</div>
+<span class="bg-surface-container-highest px-2 py-1 rounded text-[10px] font-bold text-tertiary uppercase tracking-tighter">Document Index</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-white text-lg">Internal_Knowledge_Base</h4>
+<p class="text-on-surface-variant text-sm line-clamp-2">Indexed documentation and internal research papers for the Luminal-1 RAG system.</p>
+</div>
+<div class="flex items-center gap-4 text-xs text-on-surface-variant">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="data_usage">data_usage</span>
+                            14.8 MB
+                        </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="history">history</span>
+                            Just now
+                        </div>
+</div>
+</div>
+</section>
+<!-- Bottom Section: Recent Activity & Visualizer -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Recent Dataset Activity Panel -->
+<div class="lg:col-span-1 bg-surface-container-low rounded-xl p-8">
+<h3 class="font-headline font-bold text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="timeline">timeline</span>
+                        Recent Activity
+                    </h3>
+<div class="space-y-6">
+<div class="flex gap-4">
+<div class="mt-1 w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(165,231,255,0.8)]"></div>
+<div>
+<p class="text-sm text-white font-medium">Vector Re-indexing Complete</p>
+<p class="text-xs text-on-surface-variant">Dataset: Sentiment_Alpha • 14:02</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="mt-1 w-2 h-2 rounded-full bg-secondary"></div>
+<div>
+<p class="text-sm text-white font-medium">New Source Uploaded</p>
+<p class="text-xs text-on-surface-variant">File: legal_brief_v2.pdf • 11:45</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="mt-1 w-2 h-2 rounded-full bg-tertiary"></div>
+<div>
+<p class="text-sm text-white font-medium">Data Export Triggered</p>
+<p class="text-xs text-on-surface-variant">Project: Neural Net v2 • 09:20</p>
+</div>
+</div>
+<div class="flex gap-4 opacity-50">
+<div class="mt-1 w-2 h-2 rounded-full bg-outline"></div>
+<div>
+<p class="text-sm text-white font-medium">System Backup Finished</p>
+<p class="text-xs text-on-surface-variant">Vault Integrity: 100% • Yesterday</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 py-2 text-xs font-label uppercase tracking-widest text-primary border border-primary/20 rounded-lg hover:bg-primary/5 transition-colors">
+                        View Audit Log
+                    </button>
+</div>
+<!-- Data Visualizer Placeholder -->
+<div class="lg:col-span-2 bg-surface-container rounded-xl overflow-hidden relative group">
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-transparent to-transparent z-10"></div>
+<img class="w-full h-full object-cover opacity-40 scale-105 group-hover:scale-100 transition-transform duration-1000" data-alt="futuristic 3d visualization of abstract data clusters in a dark void with glowing blue and teal connections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-AGwkkZuODW19xe22IWr63mbBKCzB_g_0J8aZt2RoWlMgH0SAmmB6pfkYKTiNMNKX4dy87IpHifdwMSOjshoKuzyrTVdXRvC3Ijlv7TiLn-s-Bmr9iiRY9NLsD_lSXHZfWC7jaBewnPFdJp5L6BPioIV1hDjFkS-eB2MYLVKph89rgJhuykfisCTbW-zNasEGpu3rh5aYZ5oz51gRph7dOckxVl_wDpsinpl-J9k2VV-UY3gFql9VPEdCmr8pyzJxRitSrCZCNA"/>
+<div class="absolute bottom-0 left-0 p-8 z-20 w-full flex items-end justify-between">
+<div>
+<p class="text-xs font-label uppercase tracking-widest text-tertiary mb-1">Spatial Vector Map</p>
+<h4 class="text-2xl font-headline font-bold text-white">Neural Cluster Visualization</h4>
+<p class="text-on-surface-variant text-sm mt-2 max-w-md">Real-time view of cross-dataset relationships and vector semantic grouping.</p>
+</div>
+<button class="bg-white/10 backdrop-blur-md text-white p-3 rounded-full hover:bg-white/20 transition-all">
+<span class="material-symbols-outlined" data-icon="fullscreen">fullscreen</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer -->
+<footer class="w-full py-12 px-8 border-t border-[#3c494e]/15 bg-[#131315]">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 w-full max-w-7xl mx-auto">
+<div class="col-span-2">
+<h3 class="font-headline text-lg text-white mb-4">Synthetic Luminal</h3>
+<p class="text-xs font-body text-on-surface-variant leading-relaxed mb-6 max-w-xs">Building the architectural foundation for the next generation of sentient interfaces and neural networks.</p>
+</div>
+<div>
+<h4 class="font-label text-xs uppercase tracking-widest text-primary mb-4">Product</h4>
+<ul class="space-y-2 text-xs text-on-surface-variant font-medium">
+<li><a class="hover:text-white transition-colors" href="#">Platform</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Neural Net</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Vault</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label text-xs uppercase tracking-widest text-primary mb-4">Company</h4>
+<ul class="space-y-2 text-xs text-on-surface-variant font-medium">
+<li><a class="hover:text-white transition-colors" href="#">About</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Blog</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label text-xs uppercase tracking-widest text-primary mb-4">Resources</h4>
+<ul class="space-y-2 text-xs text-on-surface-variant font-medium">
+<li><a class="hover:text-white transition-colors" href="#">Documentation</a></li>
+<li><a class="hover:text-white transition-colors" href="#">API Reference</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Support</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label text-xs uppercase tracking-widest text-primary mb-4">Legal</h4>
+<ul class="space-y-2 text-xs text-on-surface-variant font-medium">
+<li><a class="hover:text-white transition-colors" href="#">Privacy</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Terms</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Security</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-[#3c494e]/05 flex justify-between items-center">
+<p class="text-[10px] text-[#bbc9cf] uppercase tracking-widest">© 2024 Synthetic Luminal AI. All rights reserved.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant text-lg hover:text-white cursor-pointer" data-icon="public">public</span>
+<span class="material-symbols-outlined text-on-surface-variant text-lg hover:text-white cursor-pointer" data-icon="terminal">terminal</span>
+</div>
+</div>
+</footer>
+</main>
+</body></html>

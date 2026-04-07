@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Omnitropyc Dashboard | SyntheticLuminal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#859399",
+                        "inverse-primary": "#00677f",
+                        "surface-container-lowest": "#0e0e10",
+                        "inverse-on-surface": "#313032",
+                        "on-secondary-fixed": "#320046",
+                        "tertiary-fixed": "#6ff6ff",
+                        "on-error-container": "#ffdad6",
+                        "on-surface": "#e5e1e4",
+                        "secondary-fixed-dim": "#edb1ff",
+                        "on-tertiary": "#00373a",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#6e208c",
+                        "tertiary-fixed-dim": "#00dce6",
+                        "tertiary": "#34f4ff",
+                        "surface": "#131315",
+                        "surface-dim": "#131315",
+                        "on-error": "#690005",
+                        "primary-container": "#00d2ff",
+                        "primary-fixed": "#b6ebff",
+                        "on-primary-fixed": "#001f28",
+                        "surface-tint": "#47d6ff",
+                        "on-primary-fixed-variant": "#004e60",
+                        "on-surface-variant": "#bbc9cf",
+                        "on-secondary": "#520070",
+                        "on-primary": "#003543",
+                        "tertiary-container": "#00d6e1",
+                        "on-tertiary-container": "#00585d",
+                        "secondary-container": "#6e208c",
+                        "error": "#ffb4ab",
+                        "surface-container-high": "#2a2a2c",
+                        "on-tertiary-fixed-variant": "#004f53",
+                        "surface-variant": "#353437",
+                        "on-tertiary-fixed": "#002022",
+                        "surface-container-highest": "#353437",
+                        "surface-bright": "#39393b",
+                        "outline-variant": "#3c494e",
+                        "inverse-surface": "#e5e1e4",
+                        "secondary": "#edb1ff",
+                        "primary": "#a5e7ff",
+                        "primary-fixed-dim": "#47d6ff",
+                        "on-secondary-container": "#e498ff",
+                        "surface-container-low": "#1c1b1d",
+                        "secondary-fixed": "#f9d8ff",
+                        "on-background": "#e5e1e4",
+                        "surface-container": "#201f21",
+                        "on-primary-container": "#00566a",
+                        "background": "#131315"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { background: rgba(53, 52, 55, 0.6); backdrop-filter: blur(24px); }
+        .ai-pulse-border { position: relative; }
+        .ai-pulse-border::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 1rem;
+            padding: 2px;
+            background: linear-gradient(135deg, #a5e7ff, #34f4ff, #00d2ff);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/60 dark:bg-[#131315]/60 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+<div class="flex justify-between items-center px-8 h-16 w-full max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-xl font-['Space_Grotesk'] font-bold text-white tracking-tight">SyntheticLuminal</span>
+<div class="hidden md:flex items-center gap-6 font-['Inter'] text-sm tracking-wide">
+<a class="text-[#a5e7ff] border-b-2 border-[#00d2ff] pb-1" href="#">Platform</a>
+<a class="text-[#bbc9cf] hover:text-white transition-colors duration-300" href="#">Solutions</a>
+<a class="text-[#bbc9cf] hover:text-white transition-colors duration-300" href="#">Developers</a>
+<a class="text-[#bbc9cf] hover:text-white transition-colors duration-300" href="#">Pricing</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-container-lowest text-sm rounded-full py-2 pl-10 pr-4 w-96 border-none focus:ring-1 focus:ring-primary/40 placeholder:text-on-surface-variant/50" placeholder="Search neural pipelines, datasets or agents..." type="text"/>
+</div>
+<button class="bg-surface-container-high text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-surface-variant transition-all">Log In</button>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-4 py-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/20">Get Started</button>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#1c1b1d] dark:bg-[#1c1b1d] flex flex-col py-6 px-4 z-40 mt-16">
+<div class="mb-8 px-4">
+<h2 class="text-lg font-['Space_Grotesk'] text-white">Project Nexus</h2>
+<p class="text-xs text-primary font-medium tracking-widest uppercase">OVE-1.5 Active</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 bg-[#201f21] text-[#00d2ff] rounded-lg px-4 py-2 border-l-4 border-[#00d2ff] font-['Inter'] text-sm font-medium hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-3 text-[#bbc9cf] px-4 py-2 font-['Inter'] text-sm font-medium hover:bg-[#201f21] hover:text-white transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">hub</span> Neural Networks
+            </a>
+<a class="flex items-center gap-3 text-[#bbc9cf] px-4 py-2 font-['Inter'] text-sm font-medium hover:bg-[#201f21] hover:text-white transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">smart_toy</span> Agent Fleet
+            </a>
+<a class="flex items-center gap-3 text-[#bbc9cf] px-4 py-2 font-['Inter'] text-sm font-medium hover:bg-[#201f21] hover:text-white transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">database</span> Data Vault
+            </a>
+<a class="flex items-center gap-3 text-[#bbc9cf] px-4 py-2 font-['Inter'] text-sm font-medium hover:bg-[#201f21] hover:text-white transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">terminal</span> API Keys
+            </a>
+<a class="flex items-center gap-3 text-[#bbc9cf] px-4 py-2 font-['Inter'] text-sm font-medium hover:bg-[#201f21] hover:text-white transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+            </a>
+</nav>
+<div class="mt-auto pt-6 space-y-2 px-4 border-t border-outline-variant/15">
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 mb-4">
+<span class="material-symbols-outlined text-sm">add_circle</span> New Instance
+            </button>
+<a class="flex items-center gap-3 text-[#bbc9cf] text-sm hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">auto_stories</span> Documentation
+            </a>
+<a class="flex items-center gap-3 text-[#bbc9cf] text-sm hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">support_agent</span> Support
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pl-64 pr-[320px] pt-24 pb-12 min-h-screen">
+<div class="max-w-6xl mx-auto px-8">
+<header class="mb-10">
+<h1 class="text-4xl font-['Space_Grotesk'] font-bold text-white mb-2">Omnitropyc Dashboard</h1>
+<p class="text-on-surface-variant font-body">Real-time oversight of your synthetic intelligence architecture.</p>
+</header>
+<!-- Bento Grid Metrics -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+<!-- Large Analytics Card -->
+<div class="col-span-8 bg-surface-container-low rounded-2xl p-6 border-t border-primary/20 relative overflow-hidden">
+<div class="flex justify-between items-start mb-8">
+<div>
+<h3 class="font-headline text-lg font-bold text-white">Throughput Analytics</h3>
+<p class="text-xs text-on-surface-variant uppercase tracking-widest">Global Inference Load</p>
+</div>
+<div class="flex gap-2">
+<span class="bg-tertiary/10 text-tertiary text-[10px] px-2 py-1 rounded-full font-bold uppercase">Live</span>
+</div>
+</div>
+<div class="h-48 flex items-end gap-2 px-2">
+<!-- Mock Chart Bars -->
+<div class="flex-1 bg-primary/20 rounded-t-lg h-[40%] hover:bg-primary/40 transition-all"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-[60%] hover:bg-primary/40 transition-all"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-[45%] hover:bg-primary/40 transition-all"></div>
+<div class="flex-1 bg-primary/30 rounded-t-lg h-[80%] hover:bg-primary/40 transition-all relative">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] text-primary">Peak</div>
+</div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-[55%] hover:bg-primary/40 transition-all"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-[65%] hover:bg-primary/40 transition-all"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-[30%] hover:bg-primary/40 transition-all"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-[50%] hover:bg-primary/40 transition-all"></div>
+<div class="flex-1 bg-primary-container rounded-t-lg h-[95%] hover:bg-primary/40 transition-all"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-[70%] hover:bg-primary/40 transition-all"></div>
+</div>
+<div class="flex justify-between mt-4 text-[10px] text-on-surface-variant font-medium tracking-widest">
+<span>00:00</span>
+<span>06:00</span>
+<span>12:00</span>
+<span>18:00</span>
+<span>NOW</span>
+</div>
+</div>
+<!-- Model Status Mini Card -->
+<div class="col-span-4 bg-surface-container rounded-2xl p-6 ai-pulse-border flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">neurology</span>
+<h3 class="font-headline font-bold text-white">Active Model</h3>
+</div>
+<div class="text-3xl font-headline font-bold text-white mb-1">OVE-1.5</div>
+<p class="text-xs text-on-surface-variant">LUMINAL ARCHITECTURE</p>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-variant/10">
+<div class="flex justify-between text-xs mb-2">
+<span class="text-on-surface-variant">Latency</span>
+<span class="text-tertiary">14ms</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full w-[88%]"></div>
+</div>
+</div>
+</div>
+<!-- Runtime Usage Card -->
+<div class="col-span-4 bg-surface-container-low rounded-2xl p-6">
+<div class="flex items-center gap-3 mb-6">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">memory</span>
+</div>
+<h3 class="font-headline font-bold text-white">Agent Runtime</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-sm text-on-surface-variant">Fleet Alpha</span>
+<span class="text-sm font-mono text-primary">42%</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-on-surface-variant">Research Node</span>
+<span class="text-sm font-mono text-primary">89%</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-on-surface-variant">Security Shell</span>
+<span class="text-sm font-mono text-primary">12%</span>
+</div>
+</div>
+</div>
+<!-- Recent Neural Executions -->
+<div class="col-span-8 bg-surface-container-low rounded-2xl p-6">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline font-bold text-white">Recent Neural Executions</h3>
+<button class="text-xs text-primary font-bold hover:underline">VIEW ALL LOGS</button>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-container-lowest border-l-2 border-primary/40">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">terminal</span>
+<div>
+<p class="text-sm font-medium text-white">pattern_recognition_v4.exec</p>
+<p class="text-[10px] text-on-surface-variant">Process: 0x8922A • Duration: 0.4s</p>
+</div>
+</div>
+<span class="text-xs font-mono text-primary-container">SUCCESS</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-container-lowest border-l-2 border-tertiary/40">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">hub</span>
+<div>
+<p class="text-sm font-medium text-white">latent_space_navigation</p>
+<p class="text-[10px] text-on-surface-variant">Process: 0x112BC • Duration: 1.2s</p>
+</div>
+</div>
+<span class="text-xs font-mono text-tertiary">SUCCESS</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-container-lowest border-l-2 border-error/40">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">security</span>
+<div>
+<p class="text-sm font-medium text-white">firewall_integrity_scan</p>
+<p class="text-[10px] text-on-surface-variant">Process: 0xDEADB • Duration: --</p>
+</div>
+</div>
+<span class="text-xs font-mono text-error">TERMINATED</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Full-Width Content: Dataset Insights -->
+<div class="bg-surface-container-low rounded-2xl overflow-hidden mb-12">
+<div class="p-8 border-b border-outline-variant/10">
+<div class="flex items-center gap-4">
+<div class="h-16 w-16 rounded-2xl overflow-hidden">
+<img class="h-full w-full object-cover" data-alt="Abstract holographic sphere with intricate data strands glowing in a dark digital space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF_HjSbH8W4hCH_f-owcNmSrleyRgiPFDpnzK770sQoNE22Bla1ZrFSI2n37JrErFUr1ETDXNRhoOy2b5Y81ysARvS74Xn1qdGyvlhBa0RBK75Jx9vPNk04TeriwTQR4iUCAg8RnYCj9zk3WyYPgmovv3U3XgGJAw6L0L_aJMKtHj7HVUuk1HZZkKYPbDxgLi9agJMU3emWEueaxJzvP6q2gU_AYIt8kUGntbfVkGltYtCeFsgCxURpmi4B8jky8O3x_oKqPKy4A"/>
+</div>
+<div>
+<h2 class="text-xl font-headline font-bold text-white">Live Dataset Stream: "Cognitive Echo"</h2>
+<p class="text-sm text-on-surface-variant">Ingesting 4.2TB/s from decentralized neural nodes.</p>
+</div>
+</div>
+</div>
+<div class="p-8 grid grid-cols-4 gap-8">
+<div class="space-y-1">
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Total Vectors</p>
+<p class="text-2xl font-headline font-bold text-white">842.1B</p>
+</div>
+<div class="space-y-1">
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Clusters Identified</p>
+<p class="text-2xl font-headline font-bold text-white">12,402</p>
+</div>
+<div class="space-y-1">
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Entropic Stability</p>
+<p class="text-2xl font-headline font-bold text-tertiary">99.98%</p>
+</div>
+<div class="space-y-1">
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Node Distribution</p>
+<p class="text-2xl font-headline font-bold text-white">Global</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Right Sidebar: Contextual Feed -->
+<aside class="fixed right-0 top-0 h-screen w-[320px] bg-surface-container-lowest border-l border-outline-variant/10 pt-20 px-6 overflow-y-auto">
+<!-- System Health Widget -->
+<section class="mb-10">
+<h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-6 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span> System Health
+            </h4>
+<div class="space-y-6">
+<div class="bg-surface-container-low rounded-xl p-4">
+<div class="flex justify-between items-center mb-3">
+<span class="text-xs text-on-surface-variant">Core Stability</span>
+<span class="text-xs text-white font-mono">NOMINAL</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[96%]"></div>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-4">
+<div class="flex justify-between items-center mb-3">
+<span class="text-xs text-on-surface-variant">Cooling State</span>
+<span class="text-xs text-white font-mono">OPTIMAL</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[72%]"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Live Agent Execution Feed -->
+<section class="mb-10">
+<h4 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-6">Live Agent Execution Feed</h4>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="h-8 w-8 rounded-lg bg-primary-container/10 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-primary text-sm">smart_toy</span>
+</div>
+<div>
+<p class="text-xs font-medium text-white">Agent "Specter" dispatched</p>
+<p class="text-[10px] text-on-surface-variant">Target: API Endpoint 84a-3</p>
+<p class="text-[10px] text-primary mt-1">2m ago</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="h-8 w-8 rounded-lg bg-tertiary/10 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-tertiary text-sm">bolt</span>
+</div>
+<div>
+<p class="text-xs font-medium text-white">Task: "Anomaly Filter" completed</p>
+<p class="text-[10px] text-on-surface-variant">3,201 artifacts categorized</p>
+<p class="text-[10px] text-primary mt-1">5m ago</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="h-8 w-8 rounded-lg bg-surface-variant/20 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">settings_input_component</span>
+</div>
+<div>
+<p class="text-xs font-medium text-white">Scaling Operation initiated</p>
+<p class="text-[10px] text-on-surface-variant">Allocating 40 vCPUs to Cluster B</p>
+<p class="text-[10px] text-primary mt-1">12m ago</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Active Model Status -->
+<section class="mt-auto pb-8">
+<div class="bg-gradient-to-br from-surface-container-high to-surface-container rounded-2xl p-4 border border-outline-variant/15">
+<div class="flex justify-between items-center mb-4">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Model Info</span>
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="text-sm font-headline font-bold text-white mb-1">OVE-1.5 Ultra</p>
+<p class="text-[10px] text-on-surface-variant mb-4">Last update: 4h ago</p>
+<button class="w-full bg-surface-container-lowest text-xs text-white py-2 rounded-lg border border-outline-variant/20 hover:bg-surface-variant transition-colors">CONFIGURE ENGINE</button>
+</div>
+</section>
+</aside>
+<!-- Footer -->
+<footer class="pl-64 pr-[320px] bg-[#131315] border-t border-[#3c494e]/15">
+<div class="w-full py-12 px-8 max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+<div class="col-span-2">
+<h3 class="font-['Space_Grotesk'] text-lg text-white mb-4">Synthetic Luminal</h3>
+<p class="text-[#bbc9cf] text-xs leading-relaxed max-w-xs">Pioneering the next era of synthetic intelligence with architectural precision and ethereal UI.</p>
+</div>
+<div class="space-y-4">
+<h4 class="font-['Inter'] text-xs uppercase tracking-widest text-[#00d2ff]">Product</h4>
+<ul class="space-y-2 text-[#bbc9cf] text-xs">
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Neural Engine</a></li>
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Agent SDK</a></li>
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">API Docs</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-['Inter'] text-xs uppercase tracking-widest text-[#00d2ff]">Company</h4>
+<ul class="space-y-2 text-[#bbc9cf] text-xs">
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">About</a></li>
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Research</a></li>
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Careers</a></li>
+</ul>
+</div>
+<div class="col-span-2 flex flex-col items-end justify-between">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-[#bbc9cf] cursor-pointer hover:text-white">language</span>
+<span class="material-symbols-outlined text-[#bbc9cf] cursor-pointer hover:text-white">alternate_email</span>
+</div>
+<p class="text-[#bbc9cf] text-[10px] text-right font-['Inter'] uppercase tracking-widest">© 2024 Synthetic Luminal AI. All rights reserved.</p>
+</div>
+</div>
+</footer>
+</body></html>

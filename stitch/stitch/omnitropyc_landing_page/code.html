@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Omnitropyc | The Next Evolution of Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#a5e7ff",
+                    "secondary-container": "#6e208c",
+                    "primary-container": "#00d2ff",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#004f53",
+                    "outline-variant": "#3c494e",
+                    "tertiary-container": "#00d6e1",
+                    "on-tertiary-container": "#00585d",
+                    "inverse-primary": "#00677f",
+                    "background": "#131315",
+                    "on-surface": "#e5e1e4",
+                    "on-primary": "#003543",
+                    "on-secondary": "#520070",
+                    "on-primary-container": "#00566a",
+                    "secondary": "#edb1ff",
+                    "secondary-fixed": "#f9d8ff",
+                    "inverse-on-surface": "#313032",
+                    "on-primary-fixed": "#001f28",
+                    "surface-container-high": "#2a2a2c",
+                    "surface-container-highest": "#353437",
+                    "tertiary-fixed": "#6ff6ff",
+                    "primary-fixed": "#b6ebff",
+                    "secondary-fixed-dim": "#edb1ff",
+                    "surface-container-low": "#1c1b1d",
+                    "primary-fixed-dim": "#47d6ff",
+                    "on-secondary-fixed": "#320046",
+                    "on-secondary-container": "#e498ff",
+                    "surface": "#131315",
+                    "on-tertiary-fixed": "#002022",
+                    "on-primary-fixed-variant": "#004e60",
+                    "outline": "#859399",
+                    "surface-dim": "#131315",
+                    "on-tertiary": "#00373a",
+                    "error": "#ffb4ab",
+                    "surface-container-lowest": "#0e0e10",
+                    "inverse-surface": "#e5e1e4",
+                    "on-error-container": "#ffdad6",
+                    "surface-tint": "#47d6ff",
+                    "on-error": "#690005",
+                    "tertiary-fixed-dim": "#00dce6",
+                    "on-surface-variant": "#bbc9cf",
+                    "surface-bright": "#39393b",
+                    "surface-variant": "#353437",
+                    "surface-container": "#201f21",
+                    "on-secondary-fixed-variant": "#6e208c",
+                    "tertiary": "#34f4ff",
+                    "on-background": "#e5e1e4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "xxl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #131315; color: #e5e1e4; }
+        .headline { font-family: 'Space Grotesk', sans-serif; }
+        .glass-panel { background: rgba(53, 52, 55, 0.6); backdrop-filter: blur(24px); }
+        .neon-glow { text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
+        .ghost-border { border: 1px solid rgba(60, 73, 78, 0.15); }
+        .mask-radial { mask-image: radial-gradient(circle, black 40%, transparent 80%); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary/30">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/60 dark:bg-[#131315]/60 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+<div class="flex justify-between items-center px-8 h-16 w-full max-w-screen-2xl mx-auto">
+<div class="text-xl font-['Space_Grotesk'] font-bold text-white tracking-tight">Omnitropyc</div>
+<div class="hidden lg:flex items-center space-x-8 font-['Inter'] text-sm tracking-wide">
+<a class="text-[#bbc9cf] hover:text-white transition-colors duration-300" href="#">Features</a>
+<a class="text-[#bbc9cf] hover:text-white transition-colors duration-300" href="#">Solutions</a>
+<a class="text-[#bbc9cf] hover:text-white transition-colors duration-300" href="#">Pricing</a>
+<a class="text-[#bbc9cf] hover:text-white transition-colors duration-300" href="#">Docs</a>
+<a class="text-[#bbc9cf] hover:text-white transition-colors duration-300" href="#">Blog</a>
+</div>
+<div class="flex items-center space-x-6">
+<button class="text-[#bbc9cf] text-sm font-medium hover:text-white transition-all">Log In</button>
+<button class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2 rounded-xl font-semibold text-sm hover:scale-95 transition-transform duration-200">
+                    Get Started
+                </button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-secondary-container/20 rounded-full blur-[100px]"></div>
+</div>
+<div class="relative z-10 text-center px-4 max-w-5xl">
+<div class="inline-flex items-center space-x-2 bg-surface-container-highest/40 px-4 py-1.5 rounded-full ghost-border mb-8">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="text-xs font-label uppercase tracking-widest text-on-surface-variant">Version 4.0 Now Live</span>
+</div>
+<h1 class="headline text-6xl md:text-8xl font-bold tracking-tighter text-white mb-6 leading-[0.9]">
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-tertiary to-secondary">Omnitropyc</span> Intelligence Platform
+</h1>
+<p class="text-on-surface-variant text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-body">
+                Operate autonomous neural workflows powered by OVE-1.5 architecture. Our sentient interface curates complex data into ethereal, actionable insights.
+            </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+<button class="w-full sm:w-auto bg-gradient-to-br from-primary to-primary-container text-on-primary px-10 py-4 rounded-xl font-bold text-lg hover:shadow-[0_0_30px_rgba(0,210,255,0.4)] transition-all">
+                    Get Started
+                </button>
+<button class="w-full sm:w-auto bg-surface-container-high text-white px-10 py-4 rounded-xl font-bold text-lg ghost-border hover:bg-surface-container-highest transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="play_circle">play_circle</span>
+                    Watch Demo
+                </button>
+</div>
+</div>
+</section>
+<!-- Integration Logos -->
+<section class="py-12 bg-surface-container-lowest/50 border-y border-outline-variant/10">
+<div class="max-w-7xl mx-auto px-8 flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
+<span class="headline font-bold text-2xl tracking-tighter text-white">NEXUS</span>
+<span class="headline font-bold text-2xl tracking-tighter text-white">QUANTUM</span>
+<span class="headline font-bold text-2xl tracking-tighter text-white">VERTEX</span>
+<span class="headline font-bold text-2xl tracking-tighter text-white">SYNAPSE</span>
+<span class="headline font-bold text-2xl tracking-tighter text-white">AETHER</span>
+</div>
+</section>
+<!-- Product Preview (Bento Grid Style) -->
+<section class="py-24 px-8 max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[700px]">
+<!-- Main Preview -->
+<div class="md:col-span-8 bg-surface-container-low rounded-xxl overflow-hidden ghost-border relative group">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent opacity-50"></div>
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Futuristic dark UI dashboard with glowing cyan data visualizations and abstract neural network map in a dark room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6q_teB9mNxfuZmU4IlDLmn2v4fP5JSUwQZeNqOj8bkim9n8GUeyPK8UgwlEtnXZP-Q2OW-Rwh-H5XTmKO2OxyXqZzHOA_a4wykyNwnjbfvyqJ69k3Kv4i6nQIk6BcsIty7Vi2I4kIDunJY7qGVegAxV7LHPz8f1y_yHiVngg9JqjO5l-OKkixCRy_0YvUNwq-Dhn4mA_xiJXZhAu6Ihay35CaKiLBK-HpL0eyZzSYVFkT72x02zeVVQ6L7gHwtbIpy_eVEHYn-g"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent"></div>
+<div class="absolute bottom-8 left-8">
+<h3 class="headline text-2xl font-bold text-white mb-2">Neural Control Center</h3>
+<p class="text-on-surface-variant text-sm max-w-md">Monitor fleet performance and agent health with real-time telemetry overlays.</p>
+</div>
+</div>
+<!-- Secondary Previews -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<div class="h-full bg-surface-container rounded-xxl p-8 ghost-border flex flex-col justify-between">
+<div class="material-symbols-outlined text-tertiary text-4xl" data-icon="terminal">terminal</div>
+<div>
+<h4 class="headline text-xl font-bold text-white mb-2">Dev Console</h4>
+<p class="text-on-surface-variant text-sm">Deploy instances with a single CLI command or integrated API hooks.</p>
+</div>
+</div>
+<div class="h-full bg-primary-container/10 rounded-xxl p-8 ghost-border relative overflow-hidden group">
+<div class="absolute -right-4 -bottom-4 w-32 h-32 bg-primary/20 rounded-full blur-2xl transition-all group-hover:scale-150"></div>
+<div class="material-symbols-outlined text-primary text-4xl mb-4" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</div>
+<h4 class="headline text-xl font-bold text-white mb-2">AI Assistant</h4>
+<p class="text-on-surface-variant text-sm">Omnitropyc proactively suggests workflow optimizations.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Grid -->
+<section class="py-24 bg-surface-container-low/30">
+<div class="max-w-7xl mx-auto px-8">
+<div class="mb-16">
+<h2 class="headline text-4xl md:text-5xl font-bold text-white mb-4">Architected for Scale</h2>
+<p class="text-on-surface-variant max-w-xl">Every module is built with extreme precision to handle enterprise-grade neural operations.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
+<div class="flex flex-col space-y-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-primary ghost-border">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+</div>
+<h5 class="headline text-lg font-bold text-white">AI Analysis Engine</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">Deep-layer processing for complex pattern recognition and predictive modeling.</p>
+</div>
+<div class="flex flex-col space-y-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-tertiary ghost-border">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+</div>
+<h5 class="headline text-lg font-bold text-white">Real-time Insights</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">Sub-millisecond latency for live data streaming and instant decisioning.</p>
+</div>
+<div class="flex flex-col space-y-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-secondary ghost-border">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+</div>
+<h5 class="headline text-lg font-bold text-white">Automation Workflows</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">Visual nodes for connecting agents to your existing infrastructure.</p>
+</div>
+<div class="flex flex-col space-y-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-primary-container ghost-border">
+<span class="material-symbols-outlined" data-icon="api">api</span>
+</div>
+<h5 class="headline text-lg font-bold text-white">API Integration</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">Robust documentation for seamless deployment across any stack.</p>
+</div>
+<div class="flex flex-col space-y-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-tertiary-container ghost-border">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+</div>
+<h5 class="headline text-lg font-bold text-white">Custom AI Agents</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">Train bespoke models tailored to your specific industry constraints.</p>
+</div>
+<div class="flex flex-col space-y-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-on-tertiary-fixed-variant ghost-border">
+<span class="material-symbols-outlined" data-icon="cloud_done">cloud_done</span>
+</div>
+<h5 class="headline text-lg font-bold text-white">Secure Infrastructure</h5>
+<p class="text-sm text-on-surface-variant leading-relaxed">End-to-end encryption with decentralized vault storage protocols.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Workflow Section -->
+<section class="py-24">
+<div class="max-w-7xl mx-auto px-8">
+<div class="relative bg-surface-container rounded-[2rem] p-12 overflow-hidden ghost-border">
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-12 relative z-10">
+<div class="flex flex-col">
+<div class="text-5xl font-headline font-bold text-primary/20 mb-4">01</div>
+<h4 class="text-white font-bold mb-2">Input Data</h4>
+<p class="text-on-surface-variant text-sm">Connect your sources via API, SDK, or simple upload.</p>
+</div>
+<div class="flex flex-col">
+<div class="text-5xl font-headline font-bold text-primary/20 mb-4">02</div>
+<h4 class="text-white font-bold mb-2">AI Processing</h4>
+<p class="text-on-surface-variant text-sm">Neural engines refine and structure raw information.</p>
+</div>
+<div class="flex flex-col">
+<div class="text-5xl font-headline font-bold text-primary/20 mb-4">03</div>
+<h4 class="text-white font-bold mb-2">Generation</h4>
+<p class="text-on-surface-variant text-sm">Transform models into actionable insights and tools.</p>
+</div>
+<div class="flex flex-col">
+<div class="text-5xl font-headline font-bold text-primary/20 mb-4">04</div>
+<h4 class="text-white font-bold mb-2">Export</h4>
+<p class="text-on-surface-variant text-sm">Deploy results to your dashboards or production apps.</p>
+</div>
+</div>
+<!-- Connecting Line Visual -->
+<div class="hidden lg:block absolute top-24 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/10 to-transparent"></div>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="py-24">
+<div class="max-w-7xl mx-auto px-8">
+<div class="text-center mb-16">
+<h2 class="headline text-4xl font-bold text-white mb-4">Pricing Models</h2>
+<p class="text-on-surface-variant">Simple tiers for teams of any size.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Starter -->
+<div class="bg-surface-container-low p-8 rounded-xxl ghost-border hover:border-primary/20 transition-all flex flex-col">
+<h3 class="text-on-surface-variant font-label text-xs uppercase tracking-widest mb-4">Starter</h3>
+<div class="text-4xl font-headline font-bold text-white mb-6">$0 <span class="text-lg text-on-surface-variant font-normal">/mo</span></div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="text-sm flex items-center gap-2"><span class="material-symbols-outlined text-primary text-sm" data-icon="check">check</span> 5,000 API Requests</li>
+<li class="text-sm flex items-center gap-2"><span class="material-symbols-outlined text-primary text-sm" data-icon="check">check</span> Community Support</li>
+<li class="text-sm flex items-center gap-2"><span class="material-symbols-outlined text-primary text-sm" data-icon="check">check</span> Basic Analysis</li>
+</ul>
+<button class="w-full py-3 rounded-xl border border-outline-variant hover:bg-surface-container-high transition-all font-bold">Start Free</button>
+</div>
+<!-- Pro (Recommended) -->
+<div class="bg-surface-container p-8 rounded-xxl border-2 border-primary-container relative flex flex-col scale-105 shadow-2xl">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary-container text-on-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">Recommended</div>
+<h3 class="text-primary font-label text-xs uppercase tracking-widest mb-4">Professional</h3>
+<div class="text-4xl font-headline font-bold text-white mb-6">$49 <span class="text-lg text-on-surface-variant font-normal">/mo</span></div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="text-sm flex items-center gap-2 font-medium text-white"><span class="material-symbols-outlined text-primary text-sm" data-icon="check">check</span> Unlimited Requests</li>
+<li class="text-sm flex items-center gap-2 font-medium text-white"><span class="material-symbols-outlined text-primary text-sm" data-icon="check">check</span> Priority AI Latency</li>
+<li class="text-sm flex items-center gap-2 font-medium text-white"><span class="material-symbols-outlined text-primary text-sm" data-icon="check">check</span> Multi-Agent Fleet</li>
+<li class="text-sm flex items-center gap-2 font-medium text-white"><span class="material-symbols-outlined text-primary text-sm" data-icon="check">check</span> Advanced Analytics</li>
+</ul>
+<button class="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold shadow-lg">Get Started</button>
+</div>
+<!-- Enterprise -->
+<div class="bg-surface-container-low p-8 rounded-xxl ghost-border hover:border-primary/20 transition-all flex flex-col">
+<h3 class="text-on-surface-variant font-label text-xs uppercase tracking-widest mb-4">Enterprise</h3>
+<div class="text-4xl font-headline font-bold text-white mb-6">Custom</div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="text-sm flex items-center gap-2"><span class="material-symbols-outlined text-primary text-sm" data-icon="check">check</span> Dedicated Clusters</li>
+<li class="text-sm flex items-center gap-2"><span class="material-symbols-outlined text-primary text-sm" data-icon="check">check</span> Custom Training</li>
+<li class="text-sm flex items-center gap-2"><span class="material-symbols-outlined text-primary text-sm" data-icon="check">check</span> SLA Guarantees</li>
+<li class="text-sm flex items-center gap-2"><span class="material-symbols-outlined text-primary text-sm" data-icon="check">check</span> 24/7 Concierge</li>
+</ul>
+<button class="w-full py-3 rounded-xl border border-outline-variant hover:bg-surface-container-high transition-all font-bold">Contact Sales</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-24 overflow-hidden">
+<div class="max-w-7xl mx-auto px-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-surface-container-low p-10 rounded-xxl ghost-border relative">
+<span class="material-symbols-outlined text-primary/20 text-6xl absolute top-4 right-8" data-icon="format_quote">format_quote</span>
+<p class="text-lg italic text-white mb-8 leading-relaxed">"The Omnitropyc interface isn't just a tool; it's an extension of our creative process. We've reduced our deployment cycles by 60% using their neural fleet."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-tertiary flex items-center justify-center font-bold text-on-primary">JD</div>
+<div>
+<div class="font-bold text-white">Jordan Davies</div>
+<div class="text-xs text-on-surface-variant">CTO, Nexus Dynamics</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-10 rounded-xxl ghost-border relative">
+<span class="material-symbols-outlined text-primary/20 text-6xl absolute top-4 right-8" data-icon="format_quote">format_quote</span>
+<p class="text-lg italic text-white mb-8 leading-relaxed">"Security was our main concern, but Omnitropyc's vault architecture provided the peace of mind our enterprise legal team required for AI adoption."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-gradient-to-br from-tertiary to-secondary flex items-center justify-center font-bold text-on-primary">SK</div>
+<div>
+<div class="font-bold text-white">Sarah Koenig</div>
+<div class="text-xs text-on-surface-variant">Director of AI, Global Systems</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter CTA -->
+<section class="py-24">
+<div class="max-w-7xl mx-auto px-8">
+<div class="bg-gradient-to-br from-surface-container-low to-surface-container-lowest p-12 rounded-[2.5rem] ghost-border text-center relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/5 blur-[100px] -z-10"></div>
+<h2 class="headline text-4xl font-bold text-white mb-4">Ready to reach the Omnitropyc state?</h2>
+<p class="text-on-surface-variant mb-10 max-w-xl mx-auto">Join 10,000+ engineers building the future of autonomous systems.</p>
+<form class="max-w-md mx-auto flex gap-2">
+<input class="flex-grow bg-surface-container-highest/50 border-none rounded-xl px-4 text-white focus:ring-1 focus:ring-primary placeholder:text-on-surface-variant/50" placeholder="Enter your work email" type="email"/>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-xl font-bold hover:bg-primary-container transition-colors">Join</button>
+</form>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-[#131315] w-full py-12 px-8 border-t border-[#3c494e]/15">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 w-full max-w-7xl mx-auto">
+<div class="col-span-2">
+<div class="font-['Space_Grotesk'] text-lg text-white font-bold mb-4">Omnitropyc</div>
+<p class="text-[#bbc9cf] text-xs leading-relaxed max-w-xs mb-6">High-end editorial AI SaaS for the next generation of digital architects and neural engineers.</p>
+<div class="flex space-x-4">
+<a class="text-[#bbc9cf] hover:text-[#00d2ff] transition-colors" href="#"><span class="material-symbols-outlined text-sm" data-icon="public">public</span></a>
+<a class="text-[#bbc9cf] hover:text-[#00d2ff] transition-colors" href="#"><span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span></a>
+<a class="text-[#bbc9cf] hover:text-[#00d2ff] transition-colors" href="#"><span class="material-symbols-outlined text-sm" data-icon="forum">forum</span></a>
+</div>
+</div>
+<div>
+<h6 class="font-['Inter'] text-xs uppercase tracking-widest text-[#00d2ff] mb-6">Product</h6>
+<ul class="space-y-4 font-['Inter'] text-xs text-[#bbc9cf]">
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Features</a></li>
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Solutions</a></li>
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Pricing</a></li>
+</ul>
+</div>
+<div>
+<h6 class="font-['Inter'] text-xs uppercase tracking-widest text-[#00d2ff] mb-6">Company</h6>
+<ul class="space-y-4 font-['Inter'] text-xs text-[#bbc9cf]">
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">About</a></li>
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Careers</a></li>
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Blog</a></li>
+</ul>
+</div>
+<div>
+<h6 class="font-['Inter'] text-xs uppercase tracking-widest text-[#00d2ff] mb-6">Resources</h6>
+<ul class="space-y-4 font-['Inter'] text-xs text-[#bbc9cf]">
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Docs</a></li>
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">API Reference</a></li>
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Support</a></li>
+</ul>
+</div>
+<div>
+<h6 class="font-['Inter'] text-xs uppercase tracking-widest text-[#00d2ff] mb-6">Legal</h6>
+<ul class="space-y-4 font-['Inter'] text-xs text-[#bbc9cf]">
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Privacy</a></li>
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Terms</a></li>
+<li><a class="hover:text-[#a5e7ff] transition-opacity duration-300" href="#">Security</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-outline-variant/10 text-center">
+<p class="font-['Inter'] text-xs uppercase tracking-widest text-[#bbc9cf]">© 2024 Omnitropyc AI. All rights reserved.</p>
+</div>
+</footer>
+</body></html>
