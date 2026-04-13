@@ -165,7 +165,7 @@ class GridWorldEnvironment(QuantumEnvironment):
 
     def __init__(self, size: int = 8, config: Optional[EnvironmentConfig] = None):
         config = config or EnvironmentConfig()
-        config.state_dim = size * size + 4  # Grid + one-hot direction
+        config.state_dim = size * size # Grid only in state
         config.action_dim = 4  # Up, Down, Left, Right
 
         super().__init__(config)
@@ -203,6 +203,9 @@ class GridWorldEnvironment(QuantumEnvironment):
             np.array([0, -1]),  # Left
             np.array([0, 1])    # Right
         ]
+
+        # Ensure action is within range
+        action = int(action) % len(moves)
 
         new_pos = self.agent_pos + moves[action]
 
@@ -254,7 +257,8 @@ class GridWorldEnvironment(QuantumEnvironment):
             obs_idx = obs[0] * self.size + obs[1]
             grid[obs_idx] = -1.0
 
-        return self.quantum_encode_state(grid)
+        # return self.quantum_encode_state(grid)
+        return grid
 
     def get_state_dim(self) -> int:
         return self.config.state_dim
@@ -316,9 +320,10 @@ class ContinuousControlEnvironment(QuantumEnvironment):
 
     def _get_state(self) -> np.ndarray:
         """Get state with target information"""
-        return self.quantum_encode_state(
-            np.concatenate([self.state, self.target])
-        )
+        # return self.quantum_encode_state(
+        #     np.concatenate([self.state, self.target])
+        # )
+        return np.concatenate([self.state, self.target])
 
     def get_state_dim(self) -> int:
         return self.config.state_dim * 2
@@ -333,12 +338,12 @@ class MultiAgentEnvironment(QuantumEnvironment):
     def __init__(
         self,
         num_agents: int = 4,
-        state_dim_per_agent: int = 8,
+        state_dim_per_agent: int = 2,
         action_dim_per_agent: int = 4,
         config: Optional[EnvironmentConfig] = None
     ):
         config = config or EnvironmentConfig()
-        config.state_dim = state_dim_per_agent * num_agents
+        config.state_dim = state_dim_per_agent * num_agents + 2 # agents + target
         config.action_dim = action_dim_per_agent
 
         super().__init__(config)
@@ -395,14 +400,18 @@ class MultiAgentEnvironment(QuantumEnvironment):
 
     def _get_state(self) -> np.ndarray:
         """Get global state with all agent positions"""
+        # Ensure agent_positions are flattened correctly
+        # agent_positions is (num_agents, 2)
+        # target_position is (2,)
         state = np.concatenate([
             self.agent_positions.flatten(),
             self.target_position
         ])
-        return self.quantum_encode_state(state)
+        # return self.quantum_encode_state(state)
+        return state
 
     def get_state_dim(self) -> int:
-        return self.config.state_dim + 2
+        return self.config.state_dim
 
     def get_action_dim(self) -> int:
         return self.config.action_dim * self.num_agents
@@ -530,7 +539,7 @@ def create_environment(
     elif env_type == "multiagent":
         return MultiAgentEnvironment(
             kwargs.get('num_agents', 4),
-            kwargs.get('state_dim_per_agent', 8),
+            kwargs.get('state_dim_per_agent', 2),
             kwargs.get('action_dim_per_agent', 4),
             kwargs.get('config')
         )

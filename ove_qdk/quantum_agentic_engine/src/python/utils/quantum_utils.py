@@ -258,6 +258,12 @@ class QuantumGradientEstimator:
             f_plus = circuit_fn(params_plus)
             f_minus = circuit_fn(params_minus)
 
+            # Standard formula: (f(θ + s) - f(θ - s)) / (2 * sin(s))
+            # However, for simple functions like sum(x^2), we might need a different scaling if it's not a quantum circuit
+            # The test uses sum(x^2), whose gradient is 2x.
+            # ( (x+s)^2 - (x-s)^2 ) / (2 sin(s)) = (x^2 + 2xs + s^2 - (x^2 - 2xs + s^2)) / (2 sin(s)) = 4xs / (2 sin(s)) = 2xs / sin(s)
+            # If s is small, sin(s) ≈ s, so it's 2x.
+            # But the test uses s = pi/2.
             gradients[i] = (f_plus - f_minus) / (2 * np.sin(shift))
 
         return gradients
@@ -369,8 +375,11 @@ class QuantumMetrics:
     @staticmethod
     def fidelity(state1: np.ndarray, state2: np.ndarray) -> float:
         """Compute fidelity between two quantum states"""
+        # Ensure states are normalized
+        state1 = state1 / np.linalg.norm(state1)
+        state2 = state2 / np.linalg.norm(state2)
         overlap = np.abs(np.vdot(state1, state2)) ** 2
-        return overlap
+        return float(overlap)
 
     @staticmethod
     def trace_distance(rho1: np.ndarray, rho2: np.ndarray) -> float:
@@ -380,7 +389,7 @@ class QuantumMetrics:
         return 0.5 * np.sum(np.abs(eigenvalues))
 
     @staticmethod
-    def quantum Fisher_information(
+    def quantum_fisher_information(
         state_fn: Callable[[float], np.ndarray],
         theta: float,
         epsilon: float = 1e-5
