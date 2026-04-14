@@ -165,7 +165,7 @@ class GridWorldEnvironment(QuantumEnvironment):
 
     def __init__(self, size: int = 8, config: Optional[EnvironmentConfig] = None):
         config = config or EnvironmentConfig()
-        config.state_dim = size * size + 4  # Grid + one-hot direction
+        config.state_dim = size * size
         config.action_dim = 4  # Up, Down, Left, Right
 
         super().__init__(config)
@@ -242,17 +242,20 @@ class GridWorldEnvironment(QuantumEnvironment):
         grid = np.zeros(self.size * self.size)
 
         # Mark agent position
-        agent_idx = self.agent_pos[0] * self.size + self.agent_pos[1]
-        grid[agent_idx] = 1.0
+        agent_idx = int(self.agent_pos[0] * self.size + self.agent_pos[1])
+        if 0 <= agent_idx < len(grid):
+            grid[agent_idx] = 1.0
 
         # Mark goal position
-        goal_idx = self.goal_pos[0] * self.size + self.goal_pos[1]
-        grid[goal_idx] = 0.5
+        goal_idx = int(self.goal_pos[0] * self.size + self.goal_pos[1])
+        if 0 <= goal_idx < len(grid):
+            grid[goal_idx] = 0.5
 
         # Mark obstacles
         for obs in self.obstacles:
-            obs_idx = obs[0] * self.size + obs[1]
-            grid[obs_idx] = -1.0
+            obs_idx = int(obs[0] * self.size + obs[1])
+            if 0 <= obs_idx < len(grid):
+                grid[obs_idx] = -1.0
 
         return self.quantum_encode_state(grid)
 
@@ -268,21 +271,22 @@ class ContinuousControlEnvironment(QuantumEnvironment):
 
     def __init__(
         self,
-        state_dim: int = 24,
-        action_dim: int = 6,
+        state_dim: int = 12,
+        action_dim: int = 4,
         config: Optional[EnvironmentConfig] = None
     ):
         config = config or EnvironmentConfig()
-        config.state_dim = state_dim
+        config.state_dim = state_dim * 2  # state + target
         config.action_dim = action_dim
 
         super().__init__(config)
+        self.state_dim_base = state_dim
         self.state = np.zeros(state_dim)
         self.target = np.random.randn(state_dim) * 2
 
     def reset(self) -> np.ndarray:
-        self.state = np.random.randn(self.config.state_dim) * 0.5
-        self.target = np.random.randn(self.config.state_dim) * 2
+        self.state = np.random.randn(self.state_dim_base) * 0.5
+        self.target = np.random.randn(self.state_dim_base) * 2
         self.current_step = 0
         self.episode_reward = 0.0
         return self._get_state()
@@ -290,10 +294,10 @@ class ContinuousControlEnvironment(QuantumEnvironment):
     def step(self, action: int) -> Tuple[np.ndarray, float, bool, Dict]:
         # Convert discrete action to continuous control
         action_vectors = np.linspace(-1, 1, self.config.action_dim)
-        control = np.ones(self.config.state_dim) * action_vectors[action]
+        control = np.ones(self.state_dim_base) * action_vectors[action]
 
         # Update state (simple dynamics)
-        self.state += control * 0.1 + np.random.randn(self.config.state_dim) * 0.01
+        self.state += control * 0.1 + np.random.randn(self.state_dim_base) * 0.01
 
         # Compute reward (negative distance to target)
         distance = np.linalg.norm(self.state - self.target)
@@ -333,12 +337,12 @@ class MultiAgentEnvironment(QuantumEnvironment):
     def __init__(
         self,
         num_agents: int = 4,
-        state_dim_per_agent: int = 8,
+        state_dim_per_agent: int = 4,
         action_dim_per_agent: int = 4,
         config: Optional[EnvironmentConfig] = None
     ):
         config = config or EnvironmentConfig()
-        config.state_dim = state_dim_per_agent * num_agents
+        config.state_dim = state_dim_per_agent * num_agents + 2 # + target
         config.action_dim = action_dim_per_agent
 
         super().__init__(config)
@@ -350,7 +354,7 @@ class MultiAgentEnvironment(QuantumEnvironment):
         self.target_position = np.random.randn(2)
 
     def reset(self) -> np.ndarray:
-        self.agent_positions = np.random.randn(self.num_agents, 2)
+        self.agent_positions = np.random.randn(self.num_agents, self.state_dim_per_agent // 2)
         self.target_position = np.random.randn(2) * 3
         self.current_step = 0
         self.episode_reward = 0.0
@@ -369,7 +373,9 @@ class MultiAgentEnvironment(QuantumEnvironment):
                 np.array([1, 0]),
                 np.array([-1, 0])
             ]
-            self.agent_positions[agent_id] += moves[agent_action] * 0.1
+            # Ensure moves matches dimensionality
+            move = moves[agent_action % len(moves)][:self.agent_positions.shape[1]]
+            self.agent_positions[agent_id] += move * 0.1
 
         self.current_step += 1
 
