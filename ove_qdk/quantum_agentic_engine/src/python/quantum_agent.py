@@ -13,6 +13,7 @@ import time
 import asyncio
 from collections import deque
 import json
+from core.agent_host import QuantumAgentHost, AgentConfig
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -196,7 +197,8 @@ class QuantumPerceptionModule:
             encoded = state.flatten()
 
             # Pad or truncate to match quantum register size
-            target_size = 2 ** self.config.num_qubits
+            # Cap at 2^16 for simulation stability
+            target_size = 2 ** min(self.config.num_qubits, 16)
 
             if len(encoded) < target_size:
                 encoded = np.pad(encoded, (0, target_size - len(encoded)))
@@ -325,17 +327,32 @@ class QuantumLearningModule:
     ) -> np.ndarray:
         """Compute gradients for Q-network update"""
         # Simplified gradient computation
-        gradients = np.zeros(2 ** self.config.num_qubits)
+        # Use same cap as encoder
+        target_dim = 2 ** min(self.config.num_qubits, 16)
+        gradients = np.zeros(target_dim)
 
         for experience in batch:
+            # Ensure state is padded/truncated to target_dim for calculation
+            state = experience.state.flatten()
+            if len(state) < target_dim:
+                state = np.pad(state, (0, target_dim - len(state)))
+            else:
+                state = state[:target_dim]
+
+            next_state = experience.next_state.flatten()
+            if len(next_state) < target_dim:
+                next_state = np.pad(next_state, (0, target_dim - len(next_state)))
+            else:
+                next_state = next_state[:target_dim]
+
             # Compute TD error
-            current_q = q_network(experience.state)[experience.action]
-            next_max_q = np.max(target_network(experience.next_state))
+            current_q = q_network(state)[experience.action]
+            next_max_q = np.max(target_network(next_state))
             td_target = experience.reward + self.config.discount_factor * next_max_q * (not experience.done)
             td_error = td_target - current_q
 
             # Accumulate gradients (simplified)
-            gradients += td_error * experience.state
+            gradients += td_error * state
 
         return gradients / len(batch)
 
@@ -374,6 +391,16 @@ class QuantumAgent:
     ):
         self.config = config or AgentConfiguration()
         self.num_actions = num_actions
+
+        # Initialize Host
+        host_config = AgentConfig(
+            num_perception_qubits=self.config.num_qubits,
+            num_action_qubits=num_actions,
+            learning_rate=self.config.learning_rate,
+            discount_factor=self.config.discount_factor,
+            exploration_rate=self.config.exploration_rate
+        )
+        self.host = QuantumAgentHost(host_config)
 
         # Initialize modules
         self.perception_module = QuantumPerceptionModule(self.config)

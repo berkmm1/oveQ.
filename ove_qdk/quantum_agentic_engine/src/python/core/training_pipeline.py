@@ -18,8 +18,8 @@ from tqdm import tqdm
 import threading
 import queue
 
-from agent_host import QuantumAgentHost, AgentConfig, create_agent
-from environment_interface import QuantumEnvironment, create_environment
+from .agent_host import QuantumAgentHost, AgentConfig, create_agent
+from .environment_interface import QuantumEnvironment, create_environment
 
 logger = logging.getLogger(__name__)
 

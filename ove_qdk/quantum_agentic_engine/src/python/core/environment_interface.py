@@ -165,7 +165,7 @@ class GridWorldEnvironment(QuantumEnvironment):
 
     def __init__(self, size: int = 8, config: Optional[EnvironmentConfig] = None):
         config = config or EnvironmentConfig()
-        config.state_dim = size * size + 4  # Grid + one-hot direction
+        config.state_dim = size * size
         config.action_dim = 4  # Up, Down, Left, Right
 
         super().__init__(config)
@@ -273,7 +273,7 @@ class ContinuousControlEnvironment(QuantumEnvironment):
         config: Optional[EnvironmentConfig] = None
     ):
         config = config or EnvironmentConfig()
-        config.state_dim = state_dim
+        config.state_dim = state_dim * 2  # state + target
         config.action_dim = action_dim
 
         super().__init__(config)
@@ -321,7 +321,7 @@ class ContinuousControlEnvironment(QuantumEnvironment):
         )
 
     def get_state_dim(self) -> int:
-        return self.config.state_dim * 2
+        return self.config.state_dim
 
     def get_action_dim(self) -> int:
         return self.config.action_dim
@@ -338,7 +338,7 @@ class MultiAgentEnvironment(QuantumEnvironment):
         config: Optional[EnvironmentConfig] = None
     ):
         config = config or EnvironmentConfig()
-        config.state_dim = state_dim_per_agent * num_agents
+        config.state_dim = num_agents * 2 + 2 # positions + target
         config.action_dim = action_dim_per_agent
 
         super().__init__(config)
@@ -402,7 +402,7 @@ class MultiAgentEnvironment(QuantumEnvironment):
         return self.quantum_encode_state(state)
 
     def get_state_dim(self) -> int:
-        return self.config.state_dim + 2
+        return self.config.state_dim
 
     def get_action_dim(self) -> int:
         return self.config.action_dim * self.num_agents

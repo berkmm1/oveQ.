@@ -200,10 +200,16 @@ class QuantumAgentHost:
             self.qsharp_namespace = "QuantumAgentic.Core"
             self.learning_namespace = "QuantumAgentic.Learning"
 
+            # Initialize Q# target profile if needed for newer QDK
+            try:
+                qsharp.init(target_profile=qsharp.TargetProfile.Base)
+            except:
+                pass
+
             logger.info("Q# environment initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize Q# environment: {e}")
-            raise
+            # Non-fatal for now as we have classical fallbacks
 
     def initialize_agent(self) -> Dict[str, Any]:
         """Initialize quantum agent in Q#"""
