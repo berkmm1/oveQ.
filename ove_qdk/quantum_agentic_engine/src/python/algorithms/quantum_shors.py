@@ -99,9 +99,19 @@ class ContinuedFractions:
 
         convergents_list = []
 
-        for i in range(1, len(terms) + 1):
-            p, q = ContinuedFractions.compute_convergent(terms[:i])
-            convergents_list.append((p, q))
+        # p_n = a_n * p_{n-1} + p_{n-2}
+        # q_n = a_n * q_{n-1} + q_{n-2}
+        # Initial values for p_{-2}, p_{-1} and q_{-2}, q_{-1}
+        p_prev2, p_prev1 = 0, 1
+        q_prev2, q_prev1 = 1, 0
+
+        for a in terms:
+            p_curr = a * p_prev1 + p_prev2
+            q_curr = a * q_prev1 + q_prev2
+            convergents_list.append((p_curr, q_curr))
+
+            p_prev2, p_prev1 = p_prev1, p_curr
+            q_prev2, q_prev1 = q_prev1, q_curr
 
         return convergents_list
 
