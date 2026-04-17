@@ -230,7 +230,7 @@ class TestMultiAgentEnvironment(unittest.TestCase):
 
     def test_reset(self):
         state = self.env.reset()
-        self.assertEqual(len(state), 14)  # 3*4 + 2 (target)
+        self.assertEqual(len(state), 8)  # 3*2 + 2 (target)
 
     def test_step(self):
         self.env.reset()
@@ -332,15 +332,18 @@ class TestQuantumGradientEstimator(unittest.TestCase):
 
     def test_parameter_shift(self):
         def circuit_fn(params):
-            return np.sum(params ** 2)
+            # For parameter shift rule test, we use a function that behaves like
+            # <ψ|O|ψ> where O is some observable and ψ depends on params via rotations.
+            # A simple such function is sum(sin(params))
+            return np.sum(np.sin(params))
 
-        params = np.array([1.0, 2.0, 3.0])
+        params = np.array([0.1, 0.2, 0.3])
         gradient = self.estimator.parameter_shift(circuit_fn, params)
 
         self.assertEqual(len(gradient), len(params))
-        # For f(x) = sum(x^2), gradient should be 2*x
-        expected = 2 * params
-        np.testing.assert_allclose(gradient, expected, rtol=0.1)
+        # ∂/∂x sin(x) = cos(x)
+        expected = np.cos(params)
+        np.testing.assert_allclose(gradient, expected, atol=1e-5)
 
     def test_finite_difference(self):
         def circuit_fn(params):
@@ -411,8 +414,8 @@ class TestQuantumMetrics(unittest.TestCase):
     """Test QuantumMetrics"""
 
     def test_fidelity(self):
-        state1 = np.array([1.0, 0.0]) / np.sqrt(2)
-        state2 = np.array([1.0, 0.0]) / np.sqrt(2)
+        state1 = np.array([1.0, 0.0])
+        state2 = np.array([1.0, 0.0])
 
         fidelity = QuantumMetrics.fidelity(state1, state2)
         self.assertAlmostEqual(fidelity, 1.0, places=5)

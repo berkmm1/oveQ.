@@ -10,6 +10,7 @@ import sys
 import os
 import json
 import time
+import numpy as np
 from typing import Optional, Dict, Any
 
 # Add parent directory to path
@@ -91,6 +92,7 @@ def cmd_train(args: argparse.Namespace) -> int:
 
     try:
         from quantum_agent import QuantumAgent, AgentConfiguration
+        from core.environment_interface import create_environment
 
         # Create configuration
         config = AgentConfiguration(
@@ -101,24 +103,8 @@ def cmd_train(args: argparse.Namespace) -> int:
         # Create agent
         agent = QuantumAgent(num_actions=args.num_actions, config=config)
 
-        # Dummy environment for demonstration
-        import numpy as np
-
-        class DummyEnv:
-            def __init__(self):
-                self.state = np.random.randn(args.num_qubits)
-
-            def reset(self):
-                self.state = np.random.randn(args.num_qubits)
-                return self.state
-
-            def step(self, action):
-                reward = np.random.randn()
-                done = np.random.random() < 0.05
-                self.state = np.random.randn(args.num_qubits)
-                return self.state, reward, done, {}
-
-        env = DummyEnv()
+        # Use GridWorld environment
+        env = create_environment("gridworld", size=int(np.sqrt(args.num_qubits)) if args.num_qubits > 0 else 4)
 
         # Train
         results = agent.train(
@@ -149,28 +135,13 @@ def cmd_eval(args: argparse.Namespace) -> int:
 
     try:
         from quantum_agent import QuantumAgent
+        from core.environment_interface import create_environment
 
         # Load agent
         agent = QuantumAgent.load(args.model, num_actions=4)
 
-        # Dummy environment
-        import numpy as np
-
-        class DummyEnv:
-            def __init__(self):
-                self.state = np.random.randn(16)
-
-            def reset(self):
-                self.state = np.random.randn(16)
-                return self.state
-
-            def step(self, action):
-                reward = np.random.randn()
-                done = np.random.random() < 0.05
-                self.state = np.random.randn(16)
-                return self.state, reward, done, {}
-
-        env = DummyEnv()
+        # Use GridWorld environment
+        env = create_environment("gridworld", size=4)
 
         # Evaluate
         rewards = []
