@@ -407,11 +407,18 @@ class DistributedQuantumExecutor:
 
     def _execute_circuit(self, circuit: Any, parameters: Dict, shots: int) -> Any:
         """Execute a single circuit."""
-        # This would integrate with actual quantum backend
-        # For now, return a placeholder result
+        from core.quantum_backend import get_backend_manager
+        backend = get_backend_manager().get_backend()
+
+        # Resolve parameters if needed
+        # Actual execution using the backend
+        result = backend.execute(circuit, parameters)
+
         return {
-            'counts': {'0': shots // 2, '1': shots // 2},
-            'shots': shots
+            'counts': result.counts,
+            'probabilities': result.probabilities,
+            'shots': shots,
+            'execution_time': result.execution_time
         }
 
     def map_reduce(self, circuits: List[Any],

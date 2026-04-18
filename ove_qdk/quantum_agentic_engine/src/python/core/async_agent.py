@@ -18,7 +18,7 @@ import threading
 from functools import partial
 import copy
 
-from agent_host import QuantumAgentHost, AgentConfig, AgentState, Experience, AgentMetrics
+from core.agent_host import QuantumAgentHost, AgentConfig, AgentState, Experience, AgentMetrics
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
