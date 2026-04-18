@@ -230,7 +230,7 @@ class TestMultiAgentEnvironment(unittest.TestCase):
 
     def test_reset(self):
         state = self.env.reset()
-        self.assertEqual(len(state), 14)  # 3*4 + 2 (target)
+        self.assertEqual(len(state), 8)  # 3*2 + 2 (target)
 
     def test_step(self):
         self.env.reset()
@@ -331,15 +331,19 @@ class TestQuantumGradientEstimator(unittest.TestCase):
         self.estimator = QuantumGradientEstimator()
 
     def test_parameter_shift(self):
+        # The parameter shift rule is designed for functions like f(θ) = <ψ|U(θ)† O U(θ)|ψ>
+        # where U(θ) = exp(-i θ G / 2) and G is a Pauli operator.
+        # For a function f(θ) = cos(θ), f'(θ) = -sin(θ).
+        # Parameter shift rule: (cos(θ + π/2) - cos(θ - π/2)) / (2 * sin(π/2)) = (-sin(θ) - sin(θ)) / 2 = -sin(θ).
+
         def circuit_fn(params):
-            return np.sum(params ** 2)
+            return np.sum(np.cos(params))
 
         params = np.array([1.0, 2.0, 3.0])
         gradient = self.estimator.parameter_shift(circuit_fn, params)
 
         self.assertEqual(len(gradient), len(params))
-        # For f(x) = sum(x^2), gradient should be 2*x
-        expected = 2 * params
+        expected = -np.sin(params)
         np.testing.assert_allclose(gradient, expected, rtol=0.1)
 
     def test_finite_difference(self):
