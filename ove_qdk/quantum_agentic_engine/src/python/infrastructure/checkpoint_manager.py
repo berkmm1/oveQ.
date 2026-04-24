@@ -4,12 +4,11 @@ Checkpoint Manager for Quantum Agentic Engine
 Handles model saving, loading, and versioning
 """
 
-import os
 import json
 import pickle
 import gzip
 import shutil
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Dict, Any, Optional, List
 from pathlib import Path
 from datetime import datetime
 import logging
