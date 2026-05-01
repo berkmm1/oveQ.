@@ -4,7 +4,10 @@ Quantum Agentic Loop Engine - Python Host
 Main interface between classical control and quantum operations
 """
 
-import qsharp
+try:
+    import qsharp
+except ImportError:
+    qsharp = None
 import numpy as np
 import asyncio
 from typing import List, Dict, Tuple, Optional, Callable, Any, Union
@@ -13,6 +16,8 @@ from enum import Enum, auto
 from collections import deque
 import json
 import logging
+import os
+import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
 import threading
@@ -195,6 +200,12 @@ class QuantumAgentHost:
 
     def _init_qsharp(self):
         """Initialize Q# environment and compile operations"""
+        if qsharp is None:
+            logger.warning("Q# module not found. Running in simulation mode.")
+            self.qsharp_namespace = None
+            self.learning_namespace = None
+            return
+
         try:
             # Import Q# namespaces
             self.qsharp_namespace = "QuantumAgentic.Core"
@@ -203,7 +214,8 @@ class QuantumAgentHost:
             logger.info("Q# environment initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize Q# environment: {e}")
-            raise
+            self.qsharp_namespace = None
+            self.learning_namespace = None
 
     def initialize_agent(self) -> Dict[str, Any]:
         """Initialize quantum agent in Q#"""
@@ -233,11 +245,15 @@ class QuantumAgentHost:
                 # Normalize input
                 normalized = self._normalize_state(environment_state)
 
-                # Call Q# EncodeEnvironmentInput
-                # result = qsharp.eval(f"{self.qsharp_namespace}.EncodeEnvironmentInput(...)")
+                # Use QuantumStateEncoder if available
+                try:
+                    from utils.quantum_utils import QuantumStateEncoder
+                    encoded = QuantumStateEncoder.angle_encoding(normalized)
+                    return encoded
+                except ImportError:
+                    logger.debug("QuantumStateEncoder not found, using normalized state")
+                    return normalized
 
-                logger.debug(f"Perceived state shape: {normalized.shape}")
-                return normalized
             except Exception as e:
                 logger.error(f"Perception failed: {e}")
                 self.state = AgentState.ERROR
