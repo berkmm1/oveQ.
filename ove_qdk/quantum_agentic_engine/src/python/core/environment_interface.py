@@ -59,16 +59,13 @@ class QuantumEnvironment(ABC):
         if not self.config.quantum_encode:
             return state
 
-        # Amplitude encoding simulation
-        normalized = state / (np.linalg.norm(state) + 1e-8)
-
-        # Add phase information
-        phases = np.angle(normalized + 1e-8j)
-
-        # Combine amplitude and phase
-        encoded = np.concatenate([normalized, np.cos(phases), np.sin(phases)])
-
-        return encoded[:self.config.state_dim]
+        try:
+            from utils.quantum_utils import QuantumStateEncoder
+            return QuantumStateEncoder.amplitude_encoding(state)
+        except ImportError:
+            # Fallback amplitude encoding simulation
+            normalized = state / (np.linalg.norm(state) + 1e-8)
+            return normalized[:self.config.state_dim]
 
     def normalize_reward(self, reward: float) -> float:
         """Normalize reward"""
