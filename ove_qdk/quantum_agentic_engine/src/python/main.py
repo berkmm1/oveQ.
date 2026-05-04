@@ -90,56 +90,53 @@ def cmd_train(args: argparse.Namespace) -> int:
     logger.info("Starting training...")
 
     try:
-        from quantum_agent import QuantumAgent, AgentConfiguration
+        from core.agent_host import QuantumAgentHost, AgentConfig
+        from core.training_pipeline import TrainingPipeline, TrainingConfig
+        from core.environment_interface import create_environment
 
         # Create configuration
-        config = AgentConfiguration(
-            num_qubits=args.num_qubits,
-            learning_rate=args.learning_rate
+        agent_config = AgentConfig(
+            num_perception_qubits=args.num_qubits,
+            learning_rate=args.learning_rate,
+            num_action_qubits=args.num_actions
         )
 
         # Create agent
-        agent = QuantumAgent(num_actions=args.num_actions, config=config)
+        agent = QuantumAgentHost(agent_config)
 
-        # Dummy environment for demonstration
-        import numpy as np
+        # Create environment
+        env = create_environment("gridworld", size=8)
 
-        class DummyEnv:
-            def __init__(self):
-                self.state = np.random.randn(args.num_qubits)
-
-            def reset(self):
-                self.state = np.random.randn(args.num_qubits)
-                return self.state
-
-            def step(self, action):
-                reward = np.random.randn()
-                done = np.random.random() < 0.05
-                self.state = np.random.randn(args.num_qubits)
-                return self.state, reward, done, {}
-
-        env = DummyEnv()
-
-        # Train
-        results = agent.train(
-            env_step=env.step,
-            reset_env=env.reset,
+        # Training configuration
+        train_config = TrainingConfig(
             num_episodes=args.episodes,
-            eval_interval=max(1, args.episodes // 10)
+            max_steps_per_episode=200
         )
 
+        # Create monitoring dashboard
+        from infrastructure.monitoring import MetricsCollector, MonitoringDashboard
+        collector = MetricsCollector()
+        dashboard = MonitoringDashboard(collector)
+
+        # Create pipeline
+        pipeline = TrainingPipeline(agent, env, train_config, monitoring=dashboard)
+
+        # Train
+        stats = pipeline.train()
+
         # Save agent
-        agent.save(args.output)
+        agent.save_checkpoint(args.output)
 
         logger.info(f"Training complete!")
-        logger.info(f"Total steps: {results['total_steps']}")
-        logger.info(f"Average reward: {results['avg_reward']:.2f}")
-        logger.info(f"Training time: {results['training_time']:.2f}s")
+        logger.info(f"Best reward: {stats.best_reward:.2f}")
+        logger.info(f"Training time: {stats.training_time:.2f}s")
 
         return 0
 
     except Exception as e:
         logger.error(f"Training failed: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
         return 1
 
 
@@ -148,38 +145,26 @@ def cmd_eval(args: argparse.Namespace) -> int:
     logger.info(f"Evaluating agent from {args.model}...")
 
     try:
-        from quantum_agent import QuantumAgent
-
-        # Load agent
-        agent = QuantumAgent.load(args.model, num_actions=4)
-
-        # Dummy environment
+        from core.agent_host import QuantumAgentHost
+        from core.environment_interface import create_environment
         import numpy as np
 
-        class DummyEnv:
-            def __init__(self):
-                self.state = np.random.randn(16)
+        # Create agent and load checkpoint
+        agent = QuantumAgentHost()
+        agent.load_checkpoint(args.model)
+        agent.epsilon = 0 # Greedy
 
-            def reset(self):
-                self.state = np.random.randn(16)
-                return self.state
-
-            def step(self, action):
-                reward = np.random.randn()
-                done = np.random.random() < 0.05
-                self.state = np.random.randn(16)
-                return self.state, reward, done, {}
-
-        env = DummyEnv()
+        # Create environment
+        env = create_environment("gridworld", size=8)
 
         # Evaluate
         rewards = []
         for episode in range(args.episodes):
             result = agent.run_episode(env.step, env.reset)
-            rewards.append(result['total_reward'])
+            rewards.append(result['reward'])
 
             if args.render:
-                print(f"Episode {episode + 1}: reward={result['total_reward']:.2f}")
+                print(f"Episode {episode + 1}: reward={result['reward']:.2f}")
 
         logger.info(f"Evaluation complete!")
         logger.info(f"Average reward: {np.mean(rewards):.2f} ± {np.std(rewards):.2f}")

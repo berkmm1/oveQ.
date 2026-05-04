@@ -15,3 +15,9 @@ verification/videos/*
 .venv/
 venv/
 *.pyc
+*.pkl
+*.png
+checkpoints/
+training_stats.json
+agent.json
+test_agent.json
