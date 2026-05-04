@@ -18,8 +18,9 @@ from tqdm import tqdm
 import threading
 import queue
 
-from agent_host import QuantumAgentHost, AgentConfig, create_agent
-from environment_interface import QuantumEnvironment, create_environment
+from core.agent_host import QuantumAgentHost, AgentConfig, create_agent
+from core.environment_interface import QuantumEnvironment, create_environment
+from infrastructure.monitoring import MetricsCollector, MonitoringDashboard, MetricSnapshot
 
 logger = logging.getLogger(__name__)
 
@@ -86,11 +87,13 @@ class TrainingPipeline:
         self,
         agent: QuantumAgentHost,
         env: QuantumEnvironment,
-        config: TrainingConfig
+        config: TrainingConfig,
+        monitoring: Optional[MonitoringDashboard] = None
     ):
         self.agent = agent
         self.env = env
         self.config = config
+        self.monitoring = monitoring or MonitoringDashboard(MetricsCollector())
 
         self.stats = TrainingStats(
             episode_rewards=[],
@@ -144,6 +147,19 @@ class TrainingPipeline:
             self.stats.episode_rewards.append(episode_stats['reward'])
             self.stats.episode_lengths.append(episode_stats['length'])
             self.stats.epsilons.append(episode_stats['epsilon'])
+
+            # Update monitoring
+            snapshot = MetricSnapshot(
+                timestamp=time.time(),
+                episode=episode,
+                reward=episode_stats['reward'],
+                loss=np.mean(self.stats.losses[-10:]) if self.stats.losses else 0.0,
+                q_value_mean=0.0,  # Could be added to episode_stats if available
+                epsilon=episode_stats['epsilon'],
+                buffer_size=len(self.agent.replay_buffer),
+                decision_time_ms=np.mean(self.agent.metrics.decision_times[-episode_stats['length']:]) * 1000 if self.agent.metrics.decision_times else 0.0
+            )
+            self.monitoring.log_episode(episode, snapshot)
 
             # Check for improvement
             if episode_stats['reward'] > self.stats.best_reward + self.config.min_delta:
@@ -199,7 +215,7 @@ class TrainingPipeline:
             next_state, reward, done, info = self.env.step(action)
 
             # Store experience
-            from agent_host import Experience
+            from core.agent_host import Experience
             exp = Experience(
                 state=state,
                 action=action,
@@ -212,7 +228,7 @@ class TrainingPipeline:
             # Learn
             if len(self.agent.replay_buffer) >= self.agent.config.batch_size:
                 train_result = self.agent.learn()
-                if 'loss' in train_result:
+                if isinstance(train_result, dict) and 'loss' in train_result:
                     self.stats.losses.append(train_result['loss'])
 
             episode_reward += reward
@@ -502,7 +518,8 @@ def create_training_pipeline(
     env_type: str,
     env_kwargs: Dict[str, Any],
     agent_kwargs: Dict[str, Any],
-    training_kwargs: Dict[str, Any]
+    training_kwargs: Dict[str, Any],
+    monitoring_kwargs: Optional[Dict[str, Any]] = None
 ) -> TrainingPipeline:
     """Factory function to create training pipeline"""
 
@@ -511,13 +528,18 @@ def create_training_pipeline(
 
     # Create agent
     agent_config = AgentConfig(**agent_kwargs)
-    agent = create_agent(**agent_kwargs)
+    agent = QuantumAgentHost(agent_config)
 
     # Create training config
     training_config = TrainingConfig(**training_kwargs)
 
+    # Create monitoring
+    monitoring = None
+    if monitoring_kwargs:
+        monitoring = MonitoringDashboard(MetricsCollector(), **monitoring_kwargs)
+
     # Create pipeline
-    return TrainingPipeline(agent, env, training_config)
+    return TrainingPipeline(agent, env, training_config, monitoring)
 
 
 if __name__ == "__main__":

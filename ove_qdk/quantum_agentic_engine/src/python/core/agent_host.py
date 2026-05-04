@@ -4,7 +4,12 @@ Quantum Agentic Loop Engine - Python Host
 Main interface between classical control and quantum operations
 """
 
-import qsharp
+try:
+    import qsharp
+    QSHARP_AVAILABLE = True
+except ImportError:
+    QSHARP_AVAILABLE = False
+
 import numpy as np
 import asyncio
 from typing import List, Dict, Tuple, Optional, Callable, Any, Union
@@ -195,6 +200,11 @@ class QuantumAgentHost:
 
     def _init_qsharp(self):
         """Initialize Q# environment and compile operations"""
+        global QSHARP_AVAILABLE
+        if not QSHARP_AVAILABLE:
+            logger.warning("Q# is not available. Running in simulation mode.")
+            return
+
         try:
             # Import Q# namespaces
             self.qsharp_namespace = "QuantumAgentic.Core"
@@ -203,20 +213,24 @@ class QuantumAgentHost:
             logger.info("Q# environment initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize Q# environment: {e}")
-            raise
+            # Don't raise, fallback to simulation
+            QSHARP_AVAILABLE = False
 
     def initialize_agent(self) -> Dict[str, Any]:
-        """Initialize quantum agent in Q#"""
+        """Initialize quantum agent in Q# or Simulation"""
         with self._lock:
             try:
-                # Call Q# InitializeAgent operation
                 config_dict = self.config.to_dict()
 
-                # This would call the actual Q# operation
-                # result = qsharp.eval(f"{self.qsharp_namespace}.InitializeAgent({config_dict})")
+                if QSHARP_AVAILABLE:
+                    # Execute Q# initialization
+                    qsharp.eval(f"{self.qsharp_namespace}.InitializeAgent({config_dict})")
+                    logger.info("Quantum agent initialized in Q#")
+                else:
+                    logger.info("Quantum agent initialized in Simulation mode")
 
-                logger.info("Quantum agent initialized")
-                return {"status": "success", "config": config_dict}
+                self.state = AgentState.INITIALIZED
+                return {"status": "success", "config": config_dict, "mode": "qsharp" if QSHARP_AVAILABLE else "simulation"}
             except Exception as e:
                 logger.error(f"Failed to initialize agent: {e}")
                 self.state = AgentState.ERROR
@@ -233,8 +247,9 @@ class QuantumAgentHost:
                 # Normalize input
                 normalized = self._normalize_state(environment_state)
 
-                # Call Q# EncodeEnvironmentInput
-                # result = qsharp.eval(f"{self.qsharp_namespace}.EncodeEnvironmentInput(...)")
+                if QSHARP_AVAILABLE:
+                    input_list = normalized.tolist()
+                    qsharp.eval(f"{self.qsharp_namespace}.EncodeEnvironmentInput(perceptionQubits, {input_list})")
 
                 logger.debug(f"Perceived state shape: {normalized.shape}")
                 return normalized
@@ -251,10 +266,11 @@ class QuantumAgentHost:
             self.state = AgentState.PROCESSING
 
             try:
-                # Call Q# ApplyQuantumProcessing
-                # result = qsharp.eval(f"{self.qsharp_namespace}.ApplyQuantumProcessing(...)")
+                if QSHARP_AVAILABLE:
+                    # Apply quantum processing in Q#
+                    qsharp.eval(f"{self.qsharp_namespace}.ApplyQuantumProcessing(agent, config)")
 
-                # For now, simulate with classical processing
+                # Always return simulated/processed result for classical loop compatibility
                 processed = self._simulate_quantum_processing(encoded_state)
 
                 logger.debug(f"Processed state shape: {processed.shape}")
@@ -279,10 +295,15 @@ class QuantumAgentHost:
                     action = np.random.randint(0, self.config.num_action_qubits)
                     q_values = np.random.randn(self.config.num_action_qubits)
                 else:
-                    # Quantum policy evaluation
-                    # q_values = qsharp.eval(f"{self.learning_namespace}.QuantumQNetwork(...)")
-                    q_values = self._simulate_q_network(processed_state)
-                    action = int(np.argmax(q_values))
+                    if QSHARP_AVAILABLE:
+                        # Call Q# decision logic
+                        results = qsharp.eval(f"{self.qsharp_namespace}.MeasureDecisionQubits(agent.DecisionQubits)")
+                        # Convert measurement results to action
+                        action = sum(1 << i for i, r in enumerate(results) if r == 1) % self.config.num_action_qubits
+                        q_values = self._simulate_q_network(processed_state) # Hybrid fallback
+                    else:
+                        q_values = self._simulate_q_network(processed_state)
+                        action = int(np.argmax(q_values))
 
                 decision_time = time.time() - start_time
                 self.metrics.decision_times.append(decision_time)
@@ -302,8 +323,9 @@ class QuantumAgentHost:
             self.state = AgentState.ACTING
 
             try:
-                # Call Q# SelectActions
-                # result = qsharp.eval(f"{self.qsharp_namespace}.SelectActions(...)")
+                if QSHARP_AVAILABLE:
+                    # Signal action selection in Q#
+                    qsharp.eval(f"{self.qsharp_namespace}.SelectActions(agent.ActionQubits, decisions)")
 
                 return {
                     "action": action,
@@ -332,12 +354,12 @@ class QuantumAgentHost:
                 batch, indices, weights = self.replay_buffer.sample(batch_size)
 
                 # Convert to Q# format
-                qsharp_batch = [exp.to_qsharp() for exp in batch]
+                if QSHARP_AVAILABLE:
+                    qsharp_batch = [exp.to_qsharp() for exp in batch]
+                    # Update quantum memory in Q#
+                    qsharp.eval(f"{self.learning_namespace}.UpdateQuantumPolicy({qsharp_batch})")
 
-                # Call Q# training operations
-                # result = qsharp.eval(f"{self.learning_namespace}.QuantumActorCriticUpdate(...)")
-
-                # Simulate training
+                # Simulate training (Classical component of hybrid RL)
                 loss = self._simulate_training(batch, weights)
 
                 # Update priorities
@@ -367,7 +389,7 @@ class QuantumAgentHost:
 
     def run_episode(
         self,
-        env_step: Callable[[int], Tuple[np.ndarray, float, bool]],
+        env_step: Callable[[int], Tuple[np.ndarray, float, bool, Dict]],
         reset_env: Callable[[], np.ndarray],
         max_steps: int = 1000
     ) -> Dict[str, Any]:
@@ -387,7 +409,11 @@ class QuantumAgentHost:
             action_result = self.act(action)
 
             # Environment step
-            next_state, reward, done = env_step(action)
+            result = env_step(action)
+            if len(result) == 4:
+                next_state, reward, done, info = result
+            else:
+                next_state, reward, done = result
 
             # Store experience
             exp = Experience(
@@ -427,7 +453,7 @@ class QuantumAgentHost:
 
     def train(
         self,
-        env_step: Callable[[int], Tuple[np.ndarray, float, bool]],
+        env_step: Callable[[int], Tuple[np.ndarray, float, bool, Dict]],
         reset_env: Callable[[], np.ndarray],
         episodes: int = 1000,
         max_steps: int = 1000,
