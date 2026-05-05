@@ -242,18 +242,32 @@ class QuantumBenchmarkSuite:
 
     def _compile_circuit(self, circuit: Any) -> Any:
         """Compile circuit."""
-        # Mock compilation
+        # Simulate compilation overhead
+        time.sleep(0.01)
         return circuit
 
     def _simulate_circuit(self, circuit: Any, shots: int) -> Dict:
         """Simulate circuit."""
-        # Mock simulation
-        return {'counts': {'0': shots}}
+        # Simple simulation based on qubit count
+        num_qubits = getattr(circuit, 'num_qubits', 1)
+        time.sleep(0.001 * (2 ** min(num_qubits, 10)))
+
+        # Generate random counts
+        counts = {}
+        for _ in range(shots):
+            state = np.random.randint(0, 2**min(num_qubits, 4))
+            key = bin(state)[2:].zfill(num_qubits)
+            counts[key] = counts.get(key, 0) + 1
+        return {'counts': counts}
 
     def _estimate_fidelity(self, circuit: Any) -> float:
         """Estimate circuit fidelity."""
-        # Mock fidelity estimation
-        return 0.95
+        # Fidelity decreases with depth and qubit count
+        depth = getattr(circuit, 'depth', 1)
+        num_qubits = getattr(circuit, 'num_qubits', 1)
+        error_rate = 0.001
+        fidelity = (1 - error_rate) ** (depth * num_qubits)
+        return max(0.0, min(1.0, fidelity))
 
     def benchmark_algorithm(self, algorithm: str,
                            problem_size: int,
