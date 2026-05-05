@@ -165,7 +165,7 @@ class GridWorldEnvironment(QuantumEnvironment):
 
     def __init__(self, size: int = 8, config: Optional[EnvironmentConfig] = None):
         config = config or EnvironmentConfig()
-        config.state_dim = size * size + 4  # Grid + one-hot direction
+        config.state_dim = size * size
         config.action_dim = 4  # Up, Down, Left, Right
 
         super().__init__(config)
@@ -273,7 +273,7 @@ class ContinuousControlEnvironment(QuantumEnvironment):
         config: Optional[EnvironmentConfig] = None
     ):
         config = config or EnvironmentConfig()
-        config.state_dim = state_dim
+        config.state_dim = state_dim * 2
         config.action_dim = action_dim
 
         super().__init__(config)
@@ -338,7 +338,7 @@ class MultiAgentEnvironment(QuantumEnvironment):
         config: Optional[EnvironmentConfig] = None
     ):
         config = config or EnvironmentConfig()
-        config.state_dim = state_dim_per_agent * num_agents
+        config.state_dim = state_dim_per_agent * num_agents + 2
         config.action_dim = action_dim_per_agent
 
         super().__init__(config)
@@ -395,8 +395,15 @@ class MultiAgentEnvironment(QuantumEnvironment):
 
     def _get_state(self) -> np.ndarray:
         """Get global state with all agent positions"""
+        agent_states = []
+        for i in range(self.num_agents):
+            pos = self.agent_positions[i]
+            padded_pos = np.zeros(self.state_dim_per_agent)
+            padded_pos[:2] = pos
+            agent_states.append(padded_pos)
+
         state = np.concatenate([
-            self.agent_positions.flatten(),
+            np.concatenate(agent_states),
             self.target_position
         ])
         return self.quantum_encode_state(state)

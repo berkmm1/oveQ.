@@ -338,8 +338,9 @@ class TestQuantumGradientEstimator(unittest.TestCase):
         gradient = self.estimator.parameter_shift(circuit_fn, params)
 
         self.assertEqual(len(gradient), len(params))
-        # For f(x) = sum(x^2), gradient should be 2*x
-        expected = 2 * params
+        # For f(x) = sum(x^2), gradient should be 2*x*s/sin(s)
+        # With default shift s = pi/2, gradient = pi*x
+        expected = np.pi * params
         np.testing.assert_allclose(gradient, expected, rtol=0.1)
 
     def test_finite_difference(self):
@@ -411,8 +412,8 @@ class TestQuantumMetrics(unittest.TestCase):
     """Test QuantumMetrics"""
 
     def test_fidelity(self):
-        state1 = np.array([1.0, 0.0]) / np.sqrt(2)
-        state2 = np.array([1.0, 0.0]) / np.sqrt(2)
+        state1 = np.array([1.0, 0.0])
+        state2 = np.array([1.0, 0.0])
 
         fidelity = QuantumMetrics.fidelity(state1, state2)
         self.assertAlmostEqual(fidelity, 1.0, places=5)

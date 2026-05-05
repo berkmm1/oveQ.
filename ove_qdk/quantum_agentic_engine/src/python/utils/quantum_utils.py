@@ -380,7 +380,7 @@ class QuantumMetrics:
         return 0.5 * np.sum(np.abs(eigenvalues))
 
     @staticmethod
-    def quantum Fisher_information(
+    def quantum_fisher_information(
         state_fn: Callable[[float], np.ndarray],
         theta: float,
         epsilon: float = 1e-5

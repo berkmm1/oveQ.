@@ -299,13 +299,18 @@ class QuantumAgent:
             # Handle different message types
             if message.message_type == "STATE_SHARE":
                 # Update based on shared state
-                pass
+                if isinstance(message.content, dict) and 'quantum_state' in message.content:
+                    self.state.quantum_state = np.array(message.content['quantum_state'])
             elif message.message_type == "ACTION_REQUEST":
                 # Respond with action recommendation
-                pass
+                if self.state.current_observation is not None:
+                    encoded = self.perceive(self.state.current_observation)
+                    action = self.decide(encoded)
+                    # Note: In a real system, this would send a response message
             elif message.message_type == "COORDINATION":
                 # Update coordination info
-                pass
+                if isinstance(message.content, dict) and 'task' in message.content:
+                    self.state.current_task = message.content['task']
 
             processed.append(message)
 
