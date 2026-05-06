@@ -338,8 +338,9 @@ class TestQuantumGradientEstimator(unittest.TestCase):
         gradient = self.estimator.parameter_shift(circuit_fn, params)
 
         self.assertEqual(len(gradient), len(params))
-        # For f(x) = sum(x^2), gradient should be 2*x
-        expected = 2 * params
+        # For f(x) = sum(x^2), gradient from parameter shift with shift s=pi/2:
+        # ((x+s)^2 - (x-s)^2) / (2 * sin(s)) = 4*s*x / 2 = 2*s*x = pi*x
+        expected = np.pi * params
         np.testing.assert_allclose(gradient, expected, rtol=0.1)
 
     def test_finite_difference(self):

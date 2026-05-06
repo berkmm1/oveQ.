@@ -165,6 +165,9 @@ class QuantumAgent:
         # Message inbox
         self.message_queue: deque = deque()
 
+        # Internal coordination state
+        self.coordination_data: Dict[str, Any] = {}
+
         # Task history
         self.task_history: List[Dict[str, Any]] = []
 
@@ -298,14 +301,34 @@ class QuantumAgent:
 
             # Handle different message types
             if message.message_type == "STATE_SHARE":
-                # Update based on shared state
-                pass
+                # Update based on shared state (simulating entanglement-based state sharing)
+                if isinstance(message.content, np.ndarray):
+                    self.state.quantum_state = message.content
+                    logger.debug(f"Agent {self.config.agent_id} updated quantum state from {message.sender_id}")
+
             elif message.message_type == "ACTION_REQUEST":
-                # Respond with action recommendation
-                pass
+                # Respond with action recommendation (perceive + decide)
+                if self.state.current_observation is not None:
+                    encoded = self.perceive(self.state.current_observation)
+                    action = self.decide(encoded)
+
+                    # Create response message
+                    response = AgentMessage(
+                        sender_id=self.config.agent_id,
+                        receiver_id=message.sender_id,
+                        message_type="ACTION_RESPONSE",
+                        content={'suggested_action': action},
+                        priority=message.priority
+                    )
+                    # Note: The manager would normally handle the delivery
+                    # Here we append to a local response queue if it existed,
+                    # but we'll assume the manager pulls from processed_messages
+
             elif message.message_type == "COORDINATION":
-                # Update coordination info
-                pass
+                # Update coordination info for swarm behavior
+                if isinstance(message.content, dict):
+                    self.coordination_data.update(message.content)
+                    logger.debug(f"Agent {self.config.agent_id} updated coordination data")
 
             processed.append(message)
 

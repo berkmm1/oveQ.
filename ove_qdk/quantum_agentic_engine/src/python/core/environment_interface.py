@@ -165,7 +165,7 @@ class GridWorldEnvironment(QuantumEnvironment):
 
     def __init__(self, size: int = 8, config: Optional[EnvironmentConfig] = None):
         config = config or EnvironmentConfig()
-        config.state_dim = size * size + 4  # Grid + one-hot direction
+        config.state_dim = size * size
         config.action_dim = 4  # Up, Down, Left, Right
 
         super().__init__(config)
@@ -273,7 +273,7 @@ class ContinuousControlEnvironment(QuantumEnvironment):
         config: Optional[EnvironmentConfig] = None
     ):
         config = config or EnvironmentConfig()
-        config.state_dim = state_dim
+        config.state_dim = state_dim * 2
         config.action_dim = action_dim
 
         super().__init__(config)
@@ -338,7 +338,7 @@ class MultiAgentEnvironment(QuantumEnvironment):
         config: Optional[EnvironmentConfig] = None
     ):
         config = config or EnvironmentConfig()
-        config.state_dim = state_dim_per_agent * num_agents
+        config.state_dim = state_dim_per_agent * num_agents + 2
         config.action_dim = action_dim_per_agent
 
         super().__init__(config)
@@ -346,7 +346,7 @@ class MultiAgentEnvironment(QuantumEnvironment):
         self.state_dim_per_agent = state_dim_per_agent
         self.action_dim_per_agent = action_dim_per_agent
 
-        self.agent_positions = np.random.randn(num_agents, 2)
+        self.agent_positions = np.random.randn(num_agents, state_dim_per_agent)
         self.target_position = np.random.randn(2)
 
     def reset(self) -> np.ndarray:
@@ -369,13 +369,13 @@ class MultiAgentEnvironment(QuantumEnvironment):
                 np.array([1, 0]),
                 np.array([-1, 0])
             ]
-            self.agent_positions[agent_id] += moves[agent_action] * 0.1
+            self.agent_positions[agent_id, :2] += moves[agent_action] * 0.1
 
         self.current_step += 1
 
         # Compute team reward (collective distance to target)
         total_distance = sum(
-            np.linalg.norm(pos - self.target_position)
+            np.linalg.norm(pos[:2] - self.target_position)
             for pos in self.agent_positions
         )
         reward = -total_distance / self.num_agents
