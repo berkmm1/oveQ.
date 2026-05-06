@@ -7,6 +7,7 @@ Main interface between classical control and quantum operations
 import qsharp
 import numpy as np
 import asyncio
+from pathlib import Path
 from typing import List, Dict, Tuple, Optional, Callable, Any, Union
 from dataclasses import dataclass, field
 from enum import Enum, auto
@@ -200,6 +201,30 @@ class QuantumAgentHost:
             self.qsharp_namespace = "QuantumAgentic.Core"
             self.learning_namespace = "QuantumAgentic.Learning"
 
+            # Initialize qsharp with full capability support if available.
+            # Unrestricted is needed for many of the advanced features in the .qs files.
+            qsharp.init(target_profile=qsharp.TargetProfile.Unrestricted)
+
+            # Assuming the .qs files are in src/qs/
+            qs_path = Path(__file__).parent.parent.parent / "qs"
+
+            # Important: core files should be loaded first to avoid resolution errors
+            core_files = [
+                qs_path / "core" / "QuantumAgentCore.qs",
+                qs_path / "learning" / "QuantumReinforcementLearning.qs"
+            ]
+
+            for qs_file in core_files:
+                if qs_file.exists():
+                    with open(qs_file, 'r') as f:
+                        qsharp.eval(f.read())
+
+            # Skip loading other files for now to avoid OOM and syntax errors in non-core modules
+            # during stabilization phase.
+            # for qs_file in qs_path.glob("**/*.qs"):
+            #     if qs_file not in core_files:
+            #         ...
+
             logger.info("Q# environment initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize Q# environment: {e}")
@@ -280,7 +305,6 @@ class QuantumAgentHost:
                     q_values = np.random.randn(self.config.num_action_qubits)
                 else:
                     # Quantum policy evaluation
-                    # q_values = qsharp.eval(f"{self.learning_namespace}.QuantumQNetwork(...)")
                     q_values = self._simulate_q_network(processed_state)
                     action = int(np.argmax(q_values))
 
@@ -576,7 +600,16 @@ def create_agent(
     num_perception_qubits: int = 16,
     num_decision_qubits: int = 8,
     num_action_qubits: int = 8,
+    num_memory_qubits: int = 32,
+    num_entanglement_qubits: int = 16,
     learning_rate: float = 0.01,
+    discount_factor: float = 0.95,
+    exploration_rate: float = 0.1,
+    batch_size: int = 32,
+    buffer_size: int = 10000,
+    target_update_freq: int = 100,
+    epsilon_decay: float = 0.995,
+    epsilon_min: float = 0.01,
     async_mode: bool = False
 ) -> Union[QuantumAgentHost, AsyncQuantumAgentHost]:
     """Factory function to create agent"""
@@ -584,7 +617,16 @@ def create_agent(
         num_perception_qubits=num_perception_qubits,
         num_decision_qubits=num_decision_qubits,
         num_action_qubits=num_action_qubits,
-        learning_rate=learning_rate
+        num_memory_qubits=num_memory_qubits,
+        num_entanglement_qubits=num_entanglement_qubits,
+        learning_rate=learning_rate,
+        discount_factor=discount_factor,
+        exploration_rate=exploration_rate,
+        batch_size=batch_size,
+        buffer_size=buffer_size,
+        target_update_freq=target_update_freq,
+        epsilon_decay=epsilon_decay,
+        epsilon_min=epsilon_min
     )
 
     if async_mode:

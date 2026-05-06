@@ -64,7 +64,7 @@ def create_default_config() -> Dict[str, Any]:
         "agent": {
             "num_perception_qubits": 16,
             "num_decision_qubits": 8,
-            "num_action_qubits": 8,
+            "num_action_qubits": 4,
             "num_memory_qubits": 32,
             "num_entanglement_qubits": 16,
             "learning_rate": 0.01,
