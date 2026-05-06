@@ -165,7 +165,7 @@ class GridWorldEnvironment(QuantumEnvironment):
 
     def __init__(self, size: int = 8, config: Optional[EnvironmentConfig] = None):
         config = config or EnvironmentConfig()
-        config.state_dim = size * size + 4  # Grid + one-hot direction
+        config.state_dim = size * size
         config.action_dim = 4  # Up, Down, Left, Right
 
         super().__init__(config)

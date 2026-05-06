@@ -18,8 +18,8 @@ from tqdm import tqdm
 import threading
 import queue
 
-from agent_host import QuantumAgentHost, AgentConfig, create_agent
-from environment_interface import QuantumEnvironment, create_environment
+from .agent_host import QuantumAgentHost, AgentConfig, create_agent
+from .environment_interface import QuantumEnvironment, create_environment
 
 logger = logging.getLogger(__name__)
 
@@ -199,7 +199,7 @@ class TrainingPipeline:
             next_state, reward, done, info = self.env.step(action)
 
             # Store experience
-            from agent_host import Experience
+            from .agent_host import Experience
             exp = Experience(
                 state=state,
                 action=action,
@@ -434,7 +434,7 @@ class DistributedTrainingPipeline(TrainingPipeline):
                 next_state, reward, done, _ = env.step(action)
 
                 # Add to queue
-                from agent_host import Experience
+                from .agent_host import Experience
                 exp = Experience(
                     state=state,
                     action=action,
