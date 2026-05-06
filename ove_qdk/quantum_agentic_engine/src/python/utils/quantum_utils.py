@@ -258,6 +258,7 @@ class QuantumGradientEstimator:
             f_plus = circuit_fn(params_plus)
             f_minus = circuit_fn(params_minus)
 
+            # Standard parameter shift rule: (f(θ + s) - f(θ - s)) / (2 * sin(s))
             gradients[i] = (f_plus - f_minus) / (2 * np.sin(shift))
 
         return gradients
@@ -369,8 +370,11 @@ class QuantumMetrics:
     @staticmethod
     def fidelity(state1: np.ndarray, state2: np.ndarray) -> float:
         """Compute fidelity between two quantum states"""
+        # Normalize states
+        state1 = state1 / (np.linalg.norm(state1) + 1e-10)
+        state2 = state2 / (np.linalg.norm(state2) + 1e-10)
         overlap = np.abs(np.vdot(state1, state2)) ** 2
-        return overlap
+        return float(overlap)
 
     @staticmethod
     def trace_distance(rho1: np.ndarray, rho2: np.ndarray) -> float:
@@ -380,7 +384,7 @@ class QuantumMetrics:
         return 0.5 * np.sum(np.abs(eigenvalues))
 
     @staticmethod
-    def quantum Fisher_information(
+    def quantum_fisher_information(
         state_fn: Callable[[float], np.ndarray],
         theta: float,
         epsilon: float = 1e-5

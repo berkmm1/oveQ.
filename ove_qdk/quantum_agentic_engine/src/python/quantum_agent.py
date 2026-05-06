@@ -296,7 +296,9 @@ class QuantumDecisionModule:
             td_error = td_target - current_q
 
             # Update (simplified)
-            pass
+            # In a real implementation, this would update the q_network parameters
+            # For this simulation, we log the TD error
+            logger.debug(f"TD Error: {td_error}")
 
     def update_target_network(self):
         """Update target network"""
