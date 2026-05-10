@@ -577,14 +577,16 @@ def create_agent(
     num_decision_qubits: int = 8,
     num_action_qubits: int = 8,
     learning_rate: float = 0.01,
-    async_mode: bool = False
+    async_mode: bool = False,
+    **kwargs
 ) -> Union[QuantumAgentHost, AsyncQuantumAgentHost]:
     """Factory function to create agent"""
     config = AgentConfig(
         num_perception_qubits=num_perception_qubits,
         num_decision_qubits=num_decision_qubits,
         num_action_qubits=num_action_qubits,
-        learning_rate=learning_rate
+        learning_rate=learning_rate,
+        **kwargs
     )
 
     if async_mode:

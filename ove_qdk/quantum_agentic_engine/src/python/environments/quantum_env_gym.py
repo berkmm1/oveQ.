@@ -39,16 +39,19 @@ else:
     class Env:
         """Base environment class"""
         def __init__(self):
-            pass
+            self.observation_space = None
+            self.action_space = None
 
-        def reset(self, **kwargs):
-            raise NotImplementedError
+        def reset(self, seed=None, **kwargs):
+            if seed is not None:
+                np.random.seed(seed)
+            return np.zeros(1), {}
 
         def step(self, action):
-            raise NotImplementedError
+            return np.zeros(1), 0.0, False, {}
 
         def render(self, mode='human'):
-            pass
+            return None
 
         def close(self):
             pass
@@ -56,7 +59,10 @@ else:
     class Space:
         """Base space class"""
         def sample(self):
-            raise NotImplementedError
+            return 0
+
+        def contains(self, x):
+            return True
 
 
 @dataclass
@@ -196,7 +202,7 @@ class QuantumGridWorld(Env):
 
         return observation, info
 
-    def step(self, action: int) -> Tuple[np.ndarray, float, bool, bool, Dict]:
+    def step(self, action: int) -> Tuple[np.ndarray, float, bool, Dict]:
         """Execute action"""
         self.steps += 1
 
@@ -224,8 +230,7 @@ class QuantumGridWorld(Env):
         self.total_reward += reward
 
         # Check termination
-        terminated = self.agent_pos == self.goal_pos
-        truncated = self.steps >= self.config.max_steps
+        done = self.agent_pos == self.goal_pos or self.steps >= self.config.max_steps
 
         observation = self._get_observation()
         info = {
@@ -235,7 +240,7 @@ class QuantumGridWorld(Env):
             "position": self.agent_pos.copy()
         }
 
-        return observation, reward, terminated, truncated, info
+        return observation, reward, done, info
 
     def _update_quantum_state(self, action: int):
         """Update quantum state based on action"""
@@ -413,7 +418,7 @@ class QuantumContinuousControl(Env):
 
         return observation, info
 
-    def step(self, action: np.ndarray) -> Tuple[np.ndarray, float, bool, bool, Dict]:
+    def step(self, action: np.ndarray) -> Tuple[np.ndarray, float, bool, Dict]:
         """Execute action"""
         self.steps += 1
 
@@ -434,8 +439,7 @@ class QuantumContinuousControl(Env):
 
         # Check termination
         distance = np.linalg.norm(self.position - self.target)
-        terminated = distance < 0.5
-        truncated = self.steps >= self.config.max_steps
+        done = distance < 0.5 or self.steps >= self.config.max_steps
 
         observation = self._get_observation()
         info = {
@@ -445,7 +449,7 @@ class QuantumContinuousControl(Env):
             "position": self.position.copy()
         }
 
-        return observation, reward, terminated, truncated, info
+        return observation, reward, done, info
 
     def _update_quantum_state(self, force: np.ndarray):
         """Update quantum state"""
@@ -557,7 +561,7 @@ class QuantumMultiAgentEnv(Env):
 
         return observation, info
 
-    def step(self, action: int) -> Tuple[np.ndarray, float, bool, bool, Dict]:
+    def step(self, action: int) -> Tuple[np.ndarray, float, bool, Dict]:
         """Execute action for all agents"""
         self.steps += 1
 
@@ -592,13 +596,12 @@ class QuantumMultiAgentEnv(Env):
         reward = self._calculate_reward()
 
         # Check termination
-        terminated = False
-        truncated = self.steps >= self.config.max_steps
+        done = self.steps >= self.config.max_steps
 
         observation = self._get_observation()
         info = {"steps": self.steps, "agent_positions": [p.copy() for p in self.agent_positions]}
 
-        return observation, reward, terminated, truncated, info
+        return observation, reward, done, info
 
     def _update_shared_quantum_state(self):
         """Update shared entangled quantum state"""
