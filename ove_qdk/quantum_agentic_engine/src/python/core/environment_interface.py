@@ -204,7 +204,7 @@ class GridWorldEnvironment(QuantumEnvironment):
             np.array([0, 1])    # Right
         ]
 
-        new_pos = self.agent_pos + moves[action]
+        new_pos = self.agent_pos + moves[action % len(moves)]
 
         # Check boundaries
         if (0 <= new_pos[0] < self.size and 0 <= new_pos[1] < self.size):
