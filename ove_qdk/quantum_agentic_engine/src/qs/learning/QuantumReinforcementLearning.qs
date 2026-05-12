@@ -199,13 +199,16 @@ namespace QuantumAgentic.Learning {
     /// Select action using epsilon-greedy with quantum enhancement
     operation SelectAction(
         qValues : Double[],
-        epsilon : Double
+        epsilon : Double,
+        seed : Double
     ) : Int {
-        let rand = DrawRandomDouble(0.0, 1.0);
+        let rand = seed;
 
         if rand < epsilon {
             // Random exploration
-            return DrawRandomInt(0, Length(qValues) - 1);
+            // Use fractional part of seed to select action
+            let actionIdx = IntAsDouble(Length(qValues)) * (seed * 100.0 - Floor(seed * 100.0));
+            return DoubleAsInt(actionIdx) % Length(qValues);
         } else {
             // Greedy selection with quantum tie-breaking
             mutable maxQ = qValues[0];
@@ -669,7 +672,8 @@ namespace QuantumAgentic.Learning {
         agent : QuantumQLearningState,
         experiences : Experience[],
         priorities : Double[],
-        config : QRLConfig
+        config : QRLConfig,
+        seeds : Double[]
     ) : Unit {
         // Sample experiences based on priorities
         mutable sampledIndices = [];
@@ -682,8 +686,8 @@ namespace QuantumAgentic.Learning {
         }
 
         // Sample
-        for _ in 0..batchSize - 1 {
-            let rand = DrawRandomDouble(0.0, prioritySum);
+        for i in 0..batchSize - 1 {
+            let rand = seeds[i] * prioritySum;
             mutable cumSum = 0.0;
             mutable selectedIdx = 0;
 
@@ -963,6 +967,44 @@ namespace QuantumAgentic.Learning {
         );
 
         QuantumActorCriticUpdate(agent, perturbedExp, config);
+    }
+
+    /// # Summary
+    /// Train on a batch of experiences
+    operation TrainOnBatch(
+        agentState : QuantumAgentic.Core.AgentQuantumState,
+        batch : Experience[],
+        weights : Double[],
+        config : QRLConfig
+    ) : Double {
+        mutable totalLoss = 0.0;
+
+        for i in 0..Length(batch) - 1 {
+            let exp = batch[i];
+            let weight = weights[i];
+
+            // Re-use logic from Actor-Critic update or implement batch-specific logic
+            // For now, we use a simplified update and return an estimated loss
+
+            // Encode state
+            EncodeState(agentState.PerceptionQubits, exp.State);
+
+            // Forward pass
+            let qValues = QuantumQNetwork(agentState.PerceptionQubits, agentState.DecisionQubits, config);
+            let currentQ = qValues[exp.Action % config.ActionDim];
+
+            // Target computation (simplified)
+            let targetQ = exp.Reward; // simplified for now
+            let tdError = targetQ - currentQ;
+            let loss = tdError * tdError * weight;
+
+            // Update decision qubits as a proxy for "learning"
+            UpdateQValues(agentState.DecisionQubits, exp.Action % config.ActionDim, tdError, config);
+
+            set totalLoss += loss;
+        }
+
+        return totalLoss / IntAsDouble(Length(batch));
     }
 
     /// # Summary

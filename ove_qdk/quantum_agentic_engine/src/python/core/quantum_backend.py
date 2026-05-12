@@ -166,15 +166,33 @@ class QSharpBackend(QuantumBackend):
             # Configure Q# noise model
             logger.info(f"Depolarizing noise model with rate {rate}")
 
-    def execute(self, operation: Callable, parameters: Optional[Dict] = None) -> ExecutionResult:
+    def execute(self, operation_name: str, parameters: Optional[Dict] = None) -> ExecutionResult:
         """Execute a Q# operation."""
         start_time = time.time()
 
         try:
+            import qsharp
             if parameters:
-                result = operation.simulate(**parameters)
+                # Format parameters for qsharp.eval as Q# literals
+                # Simple mapping for common types
+                def to_qs_literal(v):
+                    if isinstance(v, bool):
+                        return 'true' if v else 'false'
+                    if isinstance(v, str):
+                        return f'"{v}"'
+                    if isinstance(v, list):
+                        return "[" + ", ".join(map(to_qs_literal, v)) + "]"
+                    if isinstance(v, dict):
+                        # Q# structs/records don't easily map from dict literals without type name
+                        # We might need to handle specific types here if known
+                        return str(v)
+                    return str(v)
+
+                param_list = [to_qs_literal(v) for v in parameters.values()]
+                param_str = ", ".join(param_list)
+                result = qsharp.eval(f"{operation_name}({param_str})")
             else:
-                result = operation.simulate()
+                result = qsharp.eval(f"{operation_name}()")
 
             execution_time = time.time() - start_time
 
@@ -447,13 +465,13 @@ class CustomSimulatorBackend(QuantumBackend):
         self._initialized = True
         logger.info("Custom simulator backend initialized")
 
-    def execute(self, circuit: List[Tuple[str, List[int], List[float]]],
+    def execute(self, circuit: Any,
                 parameters: Optional[Dict] = None) -> ExecutionResult:
         """
         Execute a circuit on the custom simulator.
 
         Args:
-            circuit: List of (gate_name, qubits, params) tuples
+            circuit: List of (gate_name, qubits, params) tuples or other representation
             parameters: Optional parameter values
 
         Returns:
@@ -461,9 +479,18 @@ class CustomSimulatorBackend(QuantumBackend):
         """
         start_time = time.time()
 
-        # Apply gates
-        for gate_name, qubits, params in circuit:
-            self._apply_gate(gate_name, qubits, params)
+        # Reset state for fresh execution
+        self.initialize()
+
+        # Handle different circuit formats
+        if isinstance(circuit, list):
+            # Apply gates
+            for gate_info in circuit:
+                if len(gate_info) == 3:
+                    gate_name, qubits, params = gate_info
+                    self._apply_gate(gate_name, qubits, params)
+        else:
+            logger.warning(f"Unsupported circuit format: {type(circuit)}")
 
         # Sample measurements
         probabilities = np.abs(self._state) ** 2

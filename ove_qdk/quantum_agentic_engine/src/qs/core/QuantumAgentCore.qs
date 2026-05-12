@@ -7,7 +7,6 @@ namespace QuantumAgentic.Core {
     open Microsoft.Quantum.Convert;
     open Microsoft.Quantum.Random;
     open Microsoft.Quantum.Diagnostics;
-    open Microsoft.Quantum.Convert;
 
     // ============================================
     // QUANTUM AGENT CORE - MAIN INTERFACE
@@ -50,14 +49,14 @@ namespace QuantumAgentic.Core {
     /// Default agent configuration
     function DefaultAgentConfig() : AgentConfig {
         return AgentConfig(
-            NumPerceptionQubits: 16,
-            NumDecisionQubits: 8,
-            NumActionQubits: 8,
-            NumMemoryQubits: 32,
-            NumEntanglementQubits: 16,
-            LearningRate: 0.01,
-            DiscountFactor: 0.95,
-            ExplorationRate: 0.1
+            16,
+            8,
+            8,
+            32,
+            16,
+            0.01,
+            0.95,
+            0.1
         );
     }
 
@@ -94,11 +93,11 @@ namespace QuantumAgentic.Core {
         );
 
         return AgentQuantumState(
-            PerceptionQubits: perceptionQubits,
-            DecisionQubits: decisionQubits,
-            ActionQubits: actionQubits,
-            MemoryQubits: memoryQubits,
-            EntanglementQubits: entanglementQubits
+            perceptionQubits,
+            decisionQubits,
+            actionQubits,
+            memoryQubits,
+            entanglementQubits
         );
     }
 
@@ -217,13 +216,15 @@ namespace QuantumAgentic.Core {
 
         // Layer 1: Single-qubit rotations
         for i in 0..n - 1 {
-            let theta = DrawRandomDouble(0.0, 2.0 * PI()) * learningRate;
+            // Use deterministic but varying angles based on qubit index to simulate variability
+            // until a suitable random source is available for Base profile.
+            let theta = (IntAsDouble(i) * 0.11 + 0.5) * learningRate;
             Rx(theta, qubits[i]);
 
-            let phi = DrawRandomDouble(0.0, 2.0 * PI()) * learningRate;
+            let phi = (IntAsDouble(i) * 0.13 + 0.3) * learningRate;
             Ry(phi, qubits[i]);
 
-            let lambda = DrawRandomDouble(0.0, 2.0 * PI()) * learningRate;
+            let lambda = (IntAsDouble(i) * 0.17 + 0.7) * learningRate;
             Rz(lambda, qubits[i]);
         }
 
@@ -311,7 +312,7 @@ namespace QuantumAgentic.Core {
             CNOT(agent.DecisionQubits[i], agent.ActionQubits[i]);
 
             // Add superposition for exploration
-            Hadamard(agent.ActionQubits[i]);
+            H(agent.ActionQubits[i]);
 
             // Re-entangle with decision
             CNOT(agent.DecisionQubits[i], agent.ActionQubits[i]);
@@ -468,11 +469,11 @@ namespace QuantumAgentic.Core {
     /// Perform full measurement of agent state
     operation FullMeasurement(agent : AgentQuantumState) : AgentMeasurement {
         return AgentMeasurement(
-            PerceptionValues: ForEach(MResetZ, agent.PerceptionQubits),
-            DecisionValues: ForEach(MResetZ, agent.DecisionQubits),
-            ActionValues: ForEach(MResetZ, agent.ActionQubits),
-            MemoryValues: ForEach(MResetZ, agent.MemoryQubits),
-            EntanglementValues: ForEach(MResetZ, agent.EntanglementQubits)
+            ForEach(MResetZ, agent.PerceptionQubits),
+            ForEach(MResetZ, agent.DecisionQubits),
+            ForEach(MResetZ, agent.ActionQubits),
+            ForEach(MResetZ, agent.MemoryQubits),
+            ForEach(MResetZ, agent.EntanglementQubits)
         );
     }
 
@@ -591,11 +592,11 @@ namespace QuantumAgentic.Core {
         ApplyToEach(H, newEntanglement);
 
         return AgentQuantumState(
-            PerceptionQubits: newPerception,
-            DecisionQubits: newDecision,
-            ActionQubits: newAction,
-            MemoryQubits: newMemory,
-            EntanglementQubits: newEntanglement
+            newPerception,
+            newDecision,
+            newAction,
+            newMemory,
+            newEntanglement
         );
     }
 
@@ -624,11 +625,11 @@ namespace QuantumAgentic.Core {
         }
 
         return AgentQuantumState(
-            PerceptionQubits: mergedPerception,
-            DecisionQubits: mergedDecision,
-            ActionQubits: mergedAction,
-            MemoryQubits: mergedMemory,
-            EntanglementQubits: mergedEntanglement
+            mergedPerception,
+            mergedDecision,
+            mergedAction,
+            mergedMemory,
+            mergedEntanglement
         );
     }
 
@@ -658,7 +659,7 @@ namespace QuantumAgentic.Core {
     @EntryPoint()
     operation Main() : Unit {
         let config = DefaultAgentConfig();
-        use agent = InitializeAgent(config);
+        let agent = InitializeAgent(config);
 
         // Test with sample input
         let testInput = [0.5, 0.3, 0.8, 0.2, 0.6, 0.9, 0.1, 0.7];
