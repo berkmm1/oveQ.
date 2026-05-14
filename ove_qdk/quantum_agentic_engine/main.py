@@ -13,6 +13,20 @@ import json
 import logging
 from pathlib import Path
 from typing import Optional, Dict, Any
+
+# Setup mocks for missing dependencies
+try:
+    from utils.dependency_mocks import setup_mocks
+    setup_mocks()
+except ImportError:
+    # Fallback if package structure is not yet correct
+    sys.path.append(str(Path(__file__).parent / "src" / "python"))
+    try:
+        from utils.dependency_mocks import setup_mocks
+        setup_mocks()
+    except ImportError:
+        pass
+
 import numpy as np
 
 # Setup logging
