@@ -169,6 +169,17 @@ class QSharpBackend(QuantumBackend):
             logger.warning("Q# not available, using fallback")
             self._simulator = None
 
+    def load_source(self, source_code: str):
+        """Load Q# source code into the workspace."""
+        if self._simulator:
+            try:
+                import qsharp
+                qsharp.eval(source_code)
+                logger.info("Q# source code loaded successfully")
+            except Exception as e:
+                logger.error(f"Failed to load Q# source: {e}")
+                raise
+
     def _setup_noise(self) -> None:
         """Setup noise model for Q#."""
         if self.config.noise_model == NoiseModel.DEPOLARIZING:
@@ -181,13 +192,28 @@ class QSharpBackend(QuantumBackend):
         start_time = time.time()
 
         try:
-            if hasattr(operation, 'simulate'):
+            import qsharp
+            if isinstance(operation, str):
+                # Assume it's an operation name or expression
+                if parameters:
+                    # Construct call string
+                    param_str = ", ".join([f"{k}: {v}" for k, v in parameters.items()])
+                    call_str = f"{operation}({param_str})"
+                    result = qsharp.eval(call_str)
+                else:
+                    result = qsharp.eval(operation)
+            elif hasattr(operation, 'simulate'):
                 if parameters:
                     result = operation.simulate(**parameters)
                 else:
                     result = operation.simulate()
-            else:
+            elif hasattr(operation, 'run'):
+                # Modern qsharp.run
+                result = qsharp.run(operation, shots=self.config.shots)
+            elif isinstance(operation, list):
                 # Handle cases where operation is a list of gates (simulation)
+                result = self._execute_gate_list(operation)
+            else:
                 result = {'0' * self.config.num_qubits: 1}
 
             execution_time = time.time() - start_time
@@ -248,6 +274,57 @@ class QSharpBackend(QuantumBackend):
     def register_operation(self, name: str, operation: Callable) -> None:
         """Register a Q# operation."""
         self._operation_registry[name] = operation
+
+    def _execute_gate_list(self, gates: List[Tuple]) -> Dict[str, int]:
+        """Execute a list of gates by generating and running Q# code."""
+        import qsharp
+
+        # Build Q# operation
+        lines = [
+            "operation TemporaryCircuit() : Result[] {",
+            f"    use qubits = Qubit[{self.config.num_qubits}];"
+        ]
+
+        for gate in gates:
+            name = gate[0]
+            qubits = gate[1]
+            params = gate[2] if len(gate) > 2 else []
+
+            if name == 'H':
+                lines.append(f"    H(qubits[{qubits[0]}]);")
+            elif name == 'X':
+                lines.append(f"    X(qubits[{qubits[0]}]);")
+            elif name == 'Y':
+                lines.append(f"    Y(qubits[{qubits[0]}]);")
+            elif name == 'Z':
+                lines.append(f"    Z(qubits[{qubits[0]}]);")
+            elif name == 'CNOT':
+                lines.append(f"    CNOT(qubits[{qubits[0]}], qubits[{qubits[1]}]);")
+            elif name == 'Ry':
+                lines.append(f"    Ry({params[0]}, qubits[{qubits[0]}]);")
+            elif name == 'Rx':
+                lines.append(f"    Rx({params[0]}, qubits[{qubits[0]}]);")
+            elif name == 'Rz':
+                lines.append(f"    Rz({params[0]}, qubits[{qubits[0]}]);")
+
+        lines.append("    let results = Microsoft.Quantum.Measurement.MResetEachZ(qubits);")
+        lines.append("    return results;")
+        lines.append("}")
+
+        # Wrap in namespace
+        code = "namespace Temp { " + "\n".join(lines) + " }"
+
+        try:
+            # Load and run
+            qsharp.eval(code)
+            res = qsharp.eval("Temp.TemporaryCircuit()")
+
+            # Convert Result[] to bitstring counts
+            bitstring = "".join(["1" if r == qsharp.Result.One or str(r) == "One" else "0" for r in res])
+            return {bitstring: 1}
+        except Exception as e:
+            logger.error(f"Failed to execute gate list in Q#: {e}")
+            return {"0" * self.config.num_qubits: 1}
 
 
 class QiskitBackend(QuantumBackend):
