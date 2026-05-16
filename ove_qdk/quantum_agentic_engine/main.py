@@ -14,20 +14,10 @@ import logging
 from pathlib import Path
 from typing import Optional, Dict, Any
 
-# Setup mocks for missing dependencies
-try:
-    from utils.dependency_mocks import setup_mocks
-    setup_mocks()
-except ImportError:
-    # Fallback if package structure is not yet correct
-    sys.path.append(str(Path(__file__).parent / "src" / "python"))
-    try:
-        from utils.dependency_mocks import setup_mocks
-        setup_mocks()
-    except ImportError:
-        pass
-
 import numpy as np
+
+# Add src/python to path for imports
+sys.path.append(str(Path(__file__).parent / "src" / "python"))
 
 # Setup logging
 logging.basicConfig(
@@ -360,12 +350,12 @@ def benchmark_command(args):
         params = np.random.randn(10)
 
         def dummy_circuit(p):
-            return np.sum(p ** 2)
+            return np.sum(np.array(p) ** 2)
 
-        start = time.perf_counter()
+        start_time = time.perf_counter()
         for _ in range(100):
             estimator.parameter_shift(dummy_circuit, params)
-        grad_time = (time.perf_counter() - start) / 100 * 1000
+        grad_time = (time.perf_counter() - start_time) / 100 * 1000
 
         print(f"  Parameter shift:   {grad_time:.3f} ms/op")
 
